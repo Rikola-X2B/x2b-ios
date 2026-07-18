@@ -36,6 +36,12 @@ struct X2BWebView: UIViewRepresentable {
         webView.backgroundColor = .black
         webView.isOpaque = false
         webView.scrollView.backgroundColor = .black
+        // WKWebView's scroll view otherwise reserves space for the notch/status bar on
+        // its own, regardless of how we position the WebView in SwiftUI - which showed
+        // as a persistent black strip even in edge-to-edge mode. Reserving that space is
+        // entirely our (SwiftUI-level) responsibility here, matching Android's manual
+        // top-inset-only padding.
+        webView.scrollView.contentInsetAdjustmentBehavior = .never
 
         context.coordinator.webView = webView
         context.coordinator.loadedURL = url
