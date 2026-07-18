@@ -30,7 +30,7 @@ struct MainView: View {
         // safe-area-constrained space, the settings button never reaches the real
         // bottom edge, and toggling edge-to-edge has no visible effect at all.
         GeometryReader { geo in
-            ZStack {
+            ZStack(alignment: .top) {
                 Color.black
 
                 if let url = URL(string: activeURLString) {
@@ -46,6 +46,17 @@ struct MainView: View {
                     // (never the sides/bottom) when not in edge-to-edge mode, matching
                     // Android's manual top-only inset padding.
                     .padding(.top, connectionStore.edgeToEdge ? 0 : geo.safeAreaInsets.top)
+                }
+
+                // Explicit solid bar reserving the status-bar area, mirroring Android's
+                // dedicated `top_black_bar` view - drawn on top rather than relying on
+                // the base Color.black showing through, so it's guaranteed visible
+                // regardless of how the WebView itself lays out its content underneath.
+                if !connectionStore.edgeToEdge {
+                    Color.black
+                        .frame(height: geo.safeAreaInsets.top)
+                        .frame(maxWidth: .infinity)
+                        .allowsHitTesting(false)
                 }
 
                 Button(action: onOpenSettings) {
