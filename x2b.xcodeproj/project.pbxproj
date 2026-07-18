@@ -14,6 +14,22 @@
 		E1FBDBFC2D1DA512006A5214 /* x2bTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FBDBFB2D1DA512006A5214 /* x2bTests.swift */; };
 		E1FBDC062D1DA512006A5214 /* x2bUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FBDC052D1DA512006A5214 /* x2bUITests.swift */; };
 		E1FBDC082D1DA512006A5214 /* x2bUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1FBDC072D1DA512006A5214 /* x2bUITestsLaunchTests.swift */; };
+		5E0C635FCED6EB6531B7E1E7 /* Connection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B286566E806B62CC738A309 /* Connection.swift */; };
+		CD26D23AF34F0B223E9D2A41 /* ConnectionStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 90643FA63772C8AE6AE4C7FD /* ConnectionStore.swift */; };
+		EAA3D90CF104D5742F6F9A51 /* URLNormalizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3883269AF266ADC10EA22957 /* URLNormalizer.swift */; };
+		083346B7221BD1358F4F98B7 /* AppConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4BAC9D6B664BBC83C999E50 /* AppConfigService.swift */; };
+		0CBD49345A0FD0808FCCC03B /* PushTokenService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085B83F5E4397F7E133101DF /* PushTokenService.swift */; };
+		4F1ABC832D841CFC2CF1B677 /* X2BWebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7B818EEF8218EC810D195DC /* X2BWebView.swift */; };
+		0F35572103235E6ABEA2993A /* MainView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF50778545E793F54A98F3B5 /* MainView.swift */; };
+		38DEDCC25DDE26BB34E68654 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D530721C439C901B5F5175E4 /* SettingsView.swift */; };
+		D4C80D414AAE76DA3AE622FF /* ConnectionEditView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E21DFE11A26DC8DA6F5DF68A /* ConnectionEditView.swift */; };
+		8A74CAFE6C3928641189959B /* ForcedUpdateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6B42CEEED3320871687BB91 /* ForcedUpdateView.swift */; };
+		A613722E2B23728415BCF87D /* PushManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 104FFF5CB7647F0877835C27 /* PushManager.swift */; };
+		72CEA7D2D463C39DBC440532 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = AE87F4105732833370EF0913 /* AppDelegate.swift */; };
+		0366A97494144E9473F90A13 /* DeviceIdentity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 214D78EA76AB5D2BD15D7445 /* DeviceIdentity.swift */; };
+		08AE6ED754FE893146DB87B3 /* ThreeFingerTapObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A07D0EC3FE8EDC5D9D1BCA7 /* ThreeFingerTapObserver.swift */; };
+		F9C9BDE49CD4D4CF7534C79E /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7948A7C1F7828607A5AB4A5B /* Color+Hex.swift */; };
+		DA314368076ADE9EABCF148C /* AppVersionChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133835BFA3E1063A9DB9ED32 /* AppVersionChecker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -44,6 +60,24 @@
 		E1FBDC012D1DA512006A5214 /* x2bUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = x2bUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E1FBDC052D1DA512006A5214 /* x2bUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = x2bUITests.swift; sourceTree = "<group>"; };
 		E1FBDC072D1DA512006A5214 /* x2bUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = x2bUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		2B286566E806B62CC738A309 /* Connection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Connection.swift; sourceTree = "<group>"; };
+		90643FA63772C8AE6AE4C7FD /* ConnectionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionStore.swift; sourceTree = "<group>"; };
+		3883269AF266ADC10EA22957 /* URLNormalizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLNormalizer.swift; sourceTree = "<group>"; };
+		D4BAC9D6B664BBC83C999E50 /* AppConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConfigService.swift; sourceTree = "<group>"; };
+		085B83F5E4397F7E133101DF /* PushTokenService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushTokenService.swift; sourceTree = "<group>"; };
+		B7B818EEF8218EC810D195DC /* X2BWebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BWebView.swift; sourceTree = "<group>"; };
+		CF50778545E793F54A98F3B5 /* MainView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainView.swift; sourceTree = "<group>"; };
+		D530721C439C901B5F5175E4 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
+		E21DFE11A26DC8DA6F5DF68A /* ConnectionEditView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionEditView.swift; sourceTree = "<group>"; };
+		E6B42CEEED3320871687BB91 /* ForcedUpdateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForcedUpdateView.swift; sourceTree = "<group>"; };
+		104FFF5CB7647F0877835C27 /* PushManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushManager.swift; sourceTree = "<group>"; };
+		AE87F4105732833370EF0913 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		214D78EA76AB5D2BD15D7445 /* DeviceIdentity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeviceIdentity.swift; sourceTree = "<group>"; };
+		7A07D0EC3FE8EDC5D9D1BCA7 /* ThreeFingerTapObserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThreeFingerTapObserver.swift; sourceTree = "<group>"; };
+		7948A7C1F7828607A5AB4A5B /* Color+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Hex.swift"; sourceTree = "<group>"; };
+		133835BFA3E1063A9DB9ED32 /* AppVersionChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionChecker.swift; sourceTree = "<group>"; };
+		C74EB409EE209E51E0BCE334 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		424DDAAD41028EE1C3E663A4 /* x2b.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = x2b.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -96,10 +130,76 @@
 			children = (
 				E1FBDBEA2D1DA50F006A5214 /* x2bApp.swift */,
 				E1FBDBEC2D1DA50F006A5214 /* ContentView.swift */,
+				3DE3B2254F105EBB74DCF24B /* Models */,
+				677161D272CC3DC084121019 /* Networking */,
+				5A99B600525DCC683E360536 /* WebView */,
+				785D6839D7E01C38A4CC5BDA /* Views */,
+				A88EA087678031B466CF43E1 /* Push */,
+				907524DF3587CFFFBFF17683 /* Support */,
+				C74EB409EE209E51E0BCE334 /* Info.plist */,
+				424DDAAD41028EE1C3E663A4 /* x2b.entitlements */,
 				E1FBDBEE2D1DA511006A5214 /* Assets.xcassets */,
 				E1FBDBF02D1DA511006A5214 /* Preview Content */,
 			);
 			path = x2b;
+			sourceTree = "<group>";
+		};
+		3DE3B2254F105EBB74DCF24B /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				2B286566E806B62CC738A309 /* Connection.swift */,
+				90643FA63772C8AE6AE4C7FD /* ConnectionStore.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		677161D272CC3DC084121019 /* Networking */ = {
+			isa = PBXGroup;
+			children = (
+				3883269AF266ADC10EA22957 /* URLNormalizer.swift */,
+				D4BAC9D6B664BBC83C999E50 /* AppConfigService.swift */,
+				085B83F5E4397F7E133101DF /* PushTokenService.swift */,
+			);
+			path = Networking;
+			sourceTree = "<group>";
+		};
+		5A99B600525DCC683E360536 /* WebView */ = {
+			isa = PBXGroup;
+			children = (
+				B7B818EEF8218EC810D195DC /* X2BWebView.swift */,
+			);
+			path = WebView;
+			sourceTree = "<group>";
+		};
+		785D6839D7E01C38A4CC5BDA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				CF50778545E793F54A98F3B5 /* MainView.swift */,
+				D530721C439C901B5F5175E4 /* SettingsView.swift */,
+				E21DFE11A26DC8DA6F5DF68A /* ConnectionEditView.swift */,
+				E6B42CEEED3320871687BB91 /* ForcedUpdateView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		A88EA087678031B466CF43E1 /* Push */ = {
+			isa = PBXGroup;
+			children = (
+				104FFF5CB7647F0877835C27 /* PushManager.swift */,
+				AE87F4105732833370EF0913 /* AppDelegate.swift */,
+			);
+			path = Push;
+			sourceTree = "<group>";
+		};
+		907524DF3587CFFFBFF17683 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				214D78EA76AB5D2BD15D7445 /* DeviceIdentity.swift */,
+				7A07D0EC3FE8EDC5D9D1BCA7 /* ThreeFingerTapObserver.swift */,
+				7948A7C1F7828607A5AB4A5B /* Color+Hex.swift */,
+				133835BFA3E1063A9DB9ED32 /* AppVersionChecker.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 		E1FBDBF02D1DA511006A5214 /* Preview Content */ = {
@@ -259,6 +359,22 @@
 			files = (
 				E1FBDBED2D1DA50F006A5214 /* ContentView.swift in Sources */,
 				E1FBDBEB2D1DA50F006A5214 /* x2bApp.swift in Sources */,
+				5E0C635FCED6EB6531B7E1E7 /* Connection.swift in Sources */,
+				CD26D23AF34F0B223E9D2A41 /* ConnectionStore.swift in Sources */,
+				EAA3D90CF104D5742F6F9A51 /* URLNormalizer.swift in Sources */,
+				083346B7221BD1358F4F98B7 /* AppConfigService.swift in Sources */,
+				0CBD49345A0FD0808FCCC03B /* PushTokenService.swift in Sources */,
+				4F1ABC832D841CFC2CF1B677 /* X2BWebView.swift in Sources */,
+				0F35572103235E6ABEA2993A /* MainView.swift in Sources */,
+				38DEDCC25DDE26BB34E68654 /* SettingsView.swift in Sources */,
+				D4C80D414AAE76DA3AE622FF /* ConnectionEditView.swift in Sources */,
+				8A74CAFE6C3928641189959B /* ForcedUpdateView.swift in Sources */,
+				A613722E2B23728415BCF87D /* PushManager.swift in Sources */,
+				72CEA7D2D463C39DBC440532 /* AppDelegate.swift in Sources */,
+				0366A97494144E9473F90A13 /* DeviceIdentity.swift in Sources */,
+				08AE6ED754FE893146DB87B3 /* ThreeFingerTapObserver.swift in Sources */,
+				F9C9BDE49CD4D4CF7534C79E /* Color+Hex.swift in Sources */,
+				DA314368076ADE9EABCF148C /* AppVersionChecker.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -419,17 +535,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = x2b/x2b.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"x2b/Preview Content\"";
 				DEVELOPMENT_TEAM = 62LZW2UPSK;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_FILE = x2b/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -448,17 +560,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = x2b/x2b.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"x2b/Preview Content\"";
 				DEVELOPMENT_TEAM = 62LZW2UPSK;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
-				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
-				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_FILE = x2b/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
