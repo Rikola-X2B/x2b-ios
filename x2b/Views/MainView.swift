@@ -24,9 +24,14 @@ struct MainView: View {
     }
 
     var body: some View {
+        // `.ignoresSafeArea()` is applied to the GeometryReader itself (not just to
+        // children) so `geo.size`/`geo.safeAreaInsets` reflect the true full-screen
+        // bounds regardless of display mode - otherwise the reader is offered only the
+        // safe-area-constrained space, the settings button never reaches the real
+        // bottom edge, and toggling edge-to-edge has no visible effect at all.
         GeometryReader { geo in
             ZStack {
-                Color.black.ignoresSafeArea()
+                Color.black
 
                 if let url = URL(string: activeURLString) {
                     X2BWebView(
@@ -37,7 +42,10 @@ struct MainView: View {
                             withAnimation { errorMessage = "Fehler beim Laden: \(message)" }
                         }
                     )
-                    .ignoresSafeArea(edges: connectionStore.edgeToEdge ? .all : [.horizontal, .bottom])
+                    // Full bleed by default; only reserve the top status-bar area
+                    // (never the sides/bottom) when not in edge-to-edge mode, matching
+                    // Android's manual top-only inset padding.
+                    .padding(.top, connectionStore.edgeToEdge ? 0 : geo.safeAreaInsets.top)
                 }
 
                 Button(action: onOpenSettings) {
@@ -73,6 +81,7 @@ struct MainView: View {
                 }
             }
         }
+        .ignoresSafeArea()
         .statusBar(hidden: connectionStore.edgeToEdge)
         .persistentSystemOverlays(connectionStore.edgeToEdge ? .hidden : .automatic)
     }
