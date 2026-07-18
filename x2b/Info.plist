@@ -60,5 +60,10 @@
 		<key>NSAllowsLocalNetworking</key>
 		<true/>
 	</dict>
+	<!-- Required since iOS 14 to actually reach X2B boxes on the local network
+	     (e.g. 192.168.x.x) - without this, iOS silently blocks local-subnet
+	     connections instead of prompting the user for permission. -->
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>X2B verbindet sich mit deiner X2B-Box im lokalen Netzwerk, um die Visualisierung anzuzeigen.</string>
 </dict>
 </plist>
