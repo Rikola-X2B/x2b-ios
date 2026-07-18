@@ -23,12 +23,20 @@ struct MainView: View {
         previewURL ?? connectionStore.activeConnectionUrl
     }
 
+    // Read directly from UIKit rather than `geo.safeAreaInsets` - a GeometryReader that
+    // ignores the safe area on itself may report zero insets to its own content, which
+    // made both display modes render identically (always edge-to-edge).
+    private var topSafeAreaInset: CGFloat {
+        UIApplication.shared.keyWindowSafeAreaInsets.top
+    }
+
     var body: some View {
         // `.ignoresSafeArea()` is applied to the GeometryReader itself (not just to
-        // children) so `geo.size`/`geo.safeAreaInsets` reflect the true full-screen
-        // bounds regardless of display mode - otherwise the reader is offered only the
-        // safe-area-constrained space, the settings button never reaches the real
-        // bottom edge, and toggling edge-to-edge has no visible effect at all.
+        // children) so `geo.size` reflects the true full-screen bounds regardless of
+        // display mode - otherwise the reader is offered only the safe-area-constrained
+        // space and the settings button never reaches the real bottom edge. The top
+        // inset itself is read separately via `topSafeAreaInset` (UIKit), since a reader
+        // that ignores the safe area on itself can't be trusted to still report it.
         GeometryReader { geo in
             ZStack(alignment: .top) {
                 Color.black
@@ -45,7 +53,7 @@ struct MainView: View {
                     // Full bleed by default; only reserve the top status-bar area
                     // (never the sides/bottom) when not in edge-to-edge mode, matching
                     // Android's manual top-only inset padding.
-                    .padding(.top, connectionStore.edgeToEdge ? 0 : geo.safeAreaInsets.top)
+                    .padding(.top, connectionStore.edgeToEdge ? 0 : topSafeAreaInset)
                 }
 
                 // Explicit solid bar reserving the status-bar area, mirroring Android's
@@ -54,7 +62,7 @@ struct MainView: View {
                 // regardless of how the WebView itself lays out its content underneath.
                 if !connectionStore.edgeToEdge {
                     Color.black
-                        .frame(height: geo.safeAreaInsets.top)
+                        .frame(height: topSafeAreaInset)
                         .frame(maxWidth: .infinity)
                         .allowsHitTesting(false)
                 }

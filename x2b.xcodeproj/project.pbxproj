@@ -30,6 +30,7 @@
 		08AE6ED754FE893146DB87B3 /* ThreeFingerTapObserver.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7A07D0EC3FE8EDC5D9D1BCA7 /* ThreeFingerTapObserver.swift */; };
 		F9C9BDE49CD4D4CF7534C79E /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7948A7C1F7828607A5AB4A5B /* Color+Hex.swift */; };
 		DA314368076ADE9EABCF148C /* AppVersionChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133835BFA3E1063A9DB9ED32 /* AppVersionChecker.swift */; };
+		0E2D3EA1D5FF3E6FB4E34059 /* UIApplication+SafeArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119F2328F6B8044B79A79608 /* UIApplication+SafeArea.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -78,6 +79,7 @@
 		133835BFA3E1063A9DB9ED32 /* AppVersionChecker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppVersionChecker.swift; sourceTree = "<group>"; };
 		C74EB409EE209E51E0BCE334 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		424DDAAD41028EE1C3E663A4 /* x2b.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = x2b.entitlements; sourceTree = "<group>"; };
+		119F2328F6B8044B79A79608 /* UIApplication+SafeArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+SafeArea.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -198,6 +200,7 @@
 				7A07D0EC3FE8EDC5D9D1BCA7 /* ThreeFingerTapObserver.swift */,
 				7948A7C1F7828607A5AB4A5B /* Color+Hex.swift */,
 				133835BFA3E1063A9DB9ED32 /* AppVersionChecker.swift */,
+				119F2328F6B8044B79A79608 /* UIApplication+SafeArea.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -375,6 +378,7 @@
 				08AE6ED754FE893146DB87B3 /* ThreeFingerTapObserver.swift in Sources */,
 				F9C9BDE49CD4D4CF7534C79E /* Color+Hex.swift in Sources */,
 				DA314368076ADE9EABCF148C /* AppVersionChecker.swift in Sources */,
+				0E2D3EA1D5FF3E6FB4E34059 /* UIApplication+SafeArea.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
