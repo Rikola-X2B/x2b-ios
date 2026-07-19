@@ -4,6 +4,7 @@
 //
 
 import SwiftUI
+import UIKit
 import WebKit
 
 /// Wraps `WKWebView` to show the X2B visualization, mirroring the WebView setup in
@@ -63,6 +64,7 @@ struct X2BWebView: UIViewRepresentable {
         weak var webView: WKWebView?
         var loadedURL: URL?
         var loginDetected = false
+        private var memoryWarningObserver: NSObjectProtocol?
 
         static let bridgeScript: WKUserScript = {
             let source = """
@@ -80,6 +82,30 @@ struct X2BWebView: UIViewRepresentable {
 
         init(parent: X2BWebView) {
             self.parent = parent
+            super.init()
+
+            // Proactively reload on a system memory warning to release the WebContent
+            // process's accumulated heap (e.g. from a long-running live dashboard page)
+            // before iOS considers the whole app for a jetsam/OOM kill.
+            memoryWarningObserver = NotificationCenter.default.addObserver(
+                forName: UIApplication.didReceiveMemoryWarningNotification,
+                object: nil,
+                queue: .main
+            ) { [weak self] _ in
+                self?.reloadAfterMemoryWarning()
+            }
+        }
+
+        deinit {
+            if let memoryWarningObserver {
+                NotificationCenter.default.removeObserver(memoryWarningObserver)
+            }
+        }
+
+        private func reloadAfterMemoryWarning() {
+            guard let webView else { return }
+            loginDetected = false
+            webView.reload()
         }
 
         func userContentController(_ userContentController: WKUserContentController, didReceive message: WKScriptMessage) {
