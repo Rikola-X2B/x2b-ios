@@ -118,10 +118,7 @@ struct SettingsView: View {
                         isActive: connection.url == connectionStore.activeConnectionUrl,
                         isSelected: selectedIDs.contains(connection.id),
                         onTap: { toggleSelection(connection.id) },
-                        onPreview: {
-                            print("🔎 [DEBUG] SettingsView: eye tapped for \(connection.url)")
-                            onPreview(connection.url)
-                        }
+                        onPreview: { onPreview(connection.url) }
                     )
                 }
             }

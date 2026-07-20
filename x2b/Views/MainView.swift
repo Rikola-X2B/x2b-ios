@@ -19,17 +19,17 @@ struct MainView: View {
 
     @State private var errorMessage: String?
 
-    private var activeURLString: String {
-        let resolved = previewURL ?? connectionStore.activeConnectionUrl
-        print("🔎 [DEBUG] MainView.activeURLString: previewURL=\(previewURL ?? "nil"), activeConnectionUrl=\(connectionStore.activeConnectionUrl), resolved=\(resolved)")
-        return resolved
-    }
+    // Read from UIKit rather than `geo.safeAreaInsets`, since a GeometryReader that
+    // ignores the safe area on itself can't be trusted to still report it. Stored as
+    // @State, updated only from `.onAppear`/`.onChange` (never read live during body
+    // computation) - querying the key window's safe area synchronously from inside a
+    // computed property used by this same view's body creates a real dependency cycle
+    // ("AttributeGraph: cycle detected"), which on-device silently broke updates to
+    // everything else computed in that render pass, including the active/preview URL.
+    @State private var topSafeAreaInset: CGFloat = 0
 
-    // Read directly from UIKit rather than `geo.safeAreaInsets` - a GeometryReader that
-    // ignores the safe area on itself may report zero insets to its own content, which
-    // made both display modes render identically (always edge-to-edge).
-    private var topSafeAreaInset: CGFloat {
-        UIApplication.shared.keyWindowSafeAreaInsets.top
+    private var activeURLString: String {
+        previewURL ?? connectionStore.activeConnectionUrl
     }
 
     var body: some View {
@@ -100,6 +100,10 @@ struct MainView: View {
                         withAnimation { self.errorMessage = nil }
                     }
                 }
+            }
+            .onAppear { topSafeAreaInset = UIApplication.shared.keyWindowSafeAreaInsets.top }
+            .onChange(of: geo.size) { _, _ in
+                topSafeAreaInset = UIApplication.shared.keyWindowSafeAreaInsets.top
             }
         }
         .ignoresSafeArea()

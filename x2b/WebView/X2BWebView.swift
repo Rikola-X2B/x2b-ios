@@ -52,14 +52,10 @@ struct X2BWebView: UIViewRepresentable {
 
     func updateUIView(_ webView: WKWebView, context: Context) {
         context.coordinator.parent = self
-        print("🔎 [DEBUG] X2BWebView.updateUIView: incoming url=\(url), coordinator.loadedURL=\(context.coordinator.loadedURL?.absoluteString ?? "nil")")
         if context.coordinator.loadedURL != url {
-            print("🔎 [DEBUG] X2BWebView.updateUIView: URL changed, calling webView.load(\(url))")
             context.coordinator.loadedURL = url
             context.coordinator.loginDetected = false
             webView.load(URLRequest(url: url))
-        } else {
-            print("🔎 [DEBUG] X2BWebView.updateUIView: URL unchanged, skipping load")
         }
     }
 
