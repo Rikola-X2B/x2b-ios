@@ -20,7 +20,9 @@ struct MainView: View {
     @State private var errorMessage: String?
 
     private var activeURLString: String {
-        previewURL ?? connectionStore.activeConnectionUrl
+        let resolved = previewURL ?? connectionStore.activeConnectionUrl
+        print("🔎 [DEBUG] MainView.activeURLString: previewURL=\(previewURL ?? "nil"), activeConnectionUrl=\(connectionStore.activeConnectionUrl), resolved=\(resolved)")
+        return resolved
     }
 
     // Read directly from UIKit rather than `geo.safeAreaInsets` - a GeometryReader that

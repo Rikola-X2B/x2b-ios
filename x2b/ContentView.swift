@@ -38,12 +38,14 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showSettings) {
             SettingsView(connectionStore: connectionStore) { url in
+                print("🔎 [DEBUG] ContentView: onPreview callback received \(url)")
                 // Dismiss first, then update previewURL on the next runloop turn -
                 // mutating state that affects the presenting view (MainView) in the
                 // very same step as dismissing the sheet isn't reliably picked up by
                 // SwiftUI; decoupling them into two steps is the robust pattern.
                 showSettings = false
                 DispatchQueue.main.async {
+                    print("🔎 [DEBUG] ContentView: setting previewURL = \(url)")
                     previewURL = url
                 }
             }
