@@ -65,6 +65,7 @@ struct X2BWebView: UIViewRepresentable {
         var loadedURL: URL?
         var loginDetected = false
         private var memoryWarningObserver: NSObjectProtocol?
+        private var lastMemoryWarningReload: Date?
 
         static let bridgeScript: WKUserScript = {
             let source = """
@@ -104,6 +105,16 @@ struct X2BWebView: UIViewRepresentable {
 
         private func reloadAfterMemoryWarning() {
             guard let webView else { return }
+
+            // Guard against a reload-triggers-warning-triggers-reload feedback loop:
+            // a reload itself briefly uses memory while the new page spins up, which
+            // could otherwise trip another warning almost immediately.
+            let minimumInterval: TimeInterval = 30
+            if let lastMemoryWarningReload, Date().timeIntervalSince(lastMemoryWarningReload) < minimumInterval {
+                return
+            }
+            lastMemoryWarningReload = Date()
+
             loginDetected = false
             webView.reload()
         }
