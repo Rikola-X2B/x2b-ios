@@ -17,7 +17,7 @@ import UIKit
 /// Swapping that out later shouldn't require touching this file's structure, only
 /// where `handleTap` gets its data from.
 @MainActor
-final class CarPlaySceneDelegate: NSObject, CPTemplateApplicationSceneDelegate {
+final class CarPlaySceneDelegate: NSObject, @preconcurrency CPTemplateApplicationSceneDelegate {
     private var interfaceController: CPInterfaceController?
     private var storeSubscription: AnyCancellable?
     private let store = CarPlaySimulationStore.shared
