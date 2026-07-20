@@ -22,7 +22,14 @@ struct ContentView: View {
             MainView(
                 connectionStore: connectionStore,
                 previewURL: previewURL,
-                onOpenSettings: { showSettings = true }
+                onOpenSettings: {
+                    // Opening Settings again ends any active preview, so switching
+                    // the active connection there always takes effect immediately -
+                    // otherwise `previewURL` would keep overriding it indefinitely
+                    // for as long as the app process stays alive.
+                    previewURL = nil
+                    showSettings = true
+                }
             )
 
             if let requiredUpdate {
