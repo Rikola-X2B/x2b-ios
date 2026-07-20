@@ -203,36 +203,47 @@ private struct ConnectionRow: View {
 
     var body: some View {
         HStack(spacing: 8) {
-            VStack(alignment: .leading, spacing: 4) {
-                Text(connection.name)
-                    .font(.system(size: 18, weight: .bold))
-                    .foregroundColor(.white)
-                Text(connection.url)
-                    .font(.system(size: 14))
-                    .foregroundColor(Color(hex: "AAAAAA"))
-                Text(connection.pushEnabled ? "Push-Benachrichtigungen: Aktiviert" : "Push-Benachrichtigungen: Ausgeschaltet")
-                    .font(.system(size: 12))
-                    .foregroundColor(connection.pushEnabled ? Color(hex: "4CAF50") : Color(hex: "888888"))
-            }
+            // A plain Button, not `.onTapGesture` on the row - an ancestor's
+            // .onTapGesture reliably swallows touches meant for a nested Button
+            // (the eye button below), which is why neither tapping the row nor the
+            // eye button ever fired reliably. Making both real, sibling Buttons
+            // avoids that gesture conflict entirely.
+            Button(action: onTap) {
+                HStack(spacing: 8) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(connection.name)
+                            .font(.system(size: 18, weight: .bold))
+                            .foregroundColor(.white)
+                        Text(connection.url)
+                            .font(.system(size: 14))
+                            .foregroundColor(Color(hex: "AAAAAA"))
+                        Text(connection.pushEnabled ? "Push-Benachrichtigungen: Aktiviert" : "Push-Benachrichtigungen: Ausgeschaltet")
+                            .font(.system(size: 12))
+                            .foregroundColor(connection.pushEnabled ? Color(hex: "4CAF50") : Color(hex: "888888"))
+                    }
 
-            Spacer()
+                    Spacer()
 
-            if isActive {
-                Image(systemName: "checkmark")
-                    .foregroundColor(Color(hex: "4CAF50"))
-                    .font(.system(size: 20, weight: .bold))
+                    if isActive {
+                        Image(systemName: "checkmark")
+                            .foregroundColor(Color(hex: "4CAF50"))
+                            .font(.system(size: 20, weight: .bold))
+                    }
+                }
+                .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
 
             Button(action: onPreview) {
                 Image(systemName: "eye.fill")
                     .foregroundColor(.white)
                     .frame(width: 36, height: 36)
+                    .contentShape(Rectangle())
             }
+            .buttonStyle(.plain)
         }
         .padding(12)
         .background(isSelected ? Color(hex: "37474F") : Color(hex: "2A2A2A"))
         .clipShape(RoundedRectangle(cornerRadius: 8))
-        .contentShape(Rectangle())
-        .onTapGesture(perform: onTap)
     }
 }
