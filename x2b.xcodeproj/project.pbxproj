@@ -34,6 +34,7 @@
 		12B4B6991E04A31F86B15459 /* CarPlayControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB408154867D16F23C019E0E /* CarPlayControl.swift */; };
 		77AD9399B8F0C6A1A3A59C0F /* CarPlaySimulationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C7397BCEEC8EACFABBE6A5 /* CarPlaySimulationStore.swift */; };
 		05F922A9D6466B30A3EB3CA1 /* CarPlaySimulationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E7593779B14EBCD3618E88 /* CarPlaySimulationView.swift */; };
+		6D49DFB8BEA3A4004C4D5558 /* CarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26D999A91B9EE793B3C3EFB /* CarPlaySceneDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -86,6 +87,7 @@
 		FB408154867D16F23C019E0E /* CarPlayControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayControl.swift; sourceTree = "<group>"; };
 		20C7397BCEEC8EACFABBE6A5 /* CarPlaySimulationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySimulationStore.swift; sourceTree = "<group>"; };
 		77E7593779B14EBCD3618E88 /* CarPlaySimulationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySimulationView.swift; sourceTree = "<group>"; };
+		C26D999A91B9EE793B3C3EFB /* CarPlaySceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySceneDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,6 +170,7 @@
 			children = (
 				20C7397BCEEC8EACFABBE6A5 /* CarPlaySimulationStore.swift */,
 				77E7593779B14EBCD3618E88 /* CarPlaySimulationView.swift */,
+				C26D999A91B9EE793B3C3EFB /* CarPlaySceneDelegate.swift */,
 			);
 			path = CarPlay;
 			sourceTree = "<group>";
@@ -399,6 +402,7 @@
 				12B4B6991E04A31F86B15459 /* CarPlayControl.swift in Sources */,
 				77AD9399B8F0C6A1A3A59C0F /* CarPlaySimulationStore.swift in Sources */,
 				05F922A9D6466B30A3EB3CA1 /* CarPlaySimulationView.swift in Sources */,
+				6D49DFB8BEA3A4004C4D5558 /* CarPlaySceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

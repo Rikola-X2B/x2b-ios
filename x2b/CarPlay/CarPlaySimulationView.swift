@@ -10,7 +10,7 @@ import SwiftUI
 /// validate the layout/interaction before the real CarPlay entitlement is approved
 /// and before the box exposes the `/api/v1` entity endpoints.
 struct CarPlaySimulationView: View {
-    @StateObject private var store = CarPlaySimulationStore()
+    @StateObject private var store = CarPlaySimulationStore.shared
     @Environment(\.dismiss) private var dismiss
 
     private let columns = [
@@ -65,7 +65,7 @@ private struct CarPlayControlTile: View {
     var body: some View {
         Button(action: performAction) {
             VStack(spacing: 8) {
-                Image(systemName: control.icon)
+                Image(systemName: control.icon(isOn: isOn))
                     .font(.system(size: 26, weight: .semibold))
                     .foregroundColor(iconColor)
                 Text(control.name)

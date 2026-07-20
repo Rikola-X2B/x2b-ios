@@ -10,6 +10,10 @@ import Foundation
 /// gets replaced by an `EntityStore` talking to the server instead.
 @MainActor
 final class CarPlaySimulationStore: ObservableObject {
+    /// Shared between the phone-side mockup and the real CarPlay grid scene, so
+    /// toggling a control in one place is reflected in the other.
+    static let shared = CarPlaySimulationStore()
+
     @Published private(set) var onStates: [String: Bool] = [:]
     @Published private(set) var recentlyFired: Set<String> = []
 
