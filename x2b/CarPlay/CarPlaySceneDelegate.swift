@@ -52,8 +52,12 @@ final class CarPlaySceneDelegate: NSObject, @preconcurrency CPTemplateApplicatio
     }
 
     private func makeGridTemplate() -> CPGridTemplate {
+        // No title text - CPGridTemplate has no API for a custom background/logo
+        // image (CarPlay renders that chrome itself), and the app's own icon
+        // already shows in the CarPlay sidebar, so a redundant "X2B" text title
+        // isn't worth the space.
         let buttons = CarPlayControl.simulationSet.map(gridButton)
-        return CPGridTemplate(title: "X2B", gridButtons: buttons)
+        return CPGridTemplate(title: nil, gridButtons: buttons)
     }
 
     private func gridButton(for control: CarPlayControl) -> CPGridButton {
