@@ -16,6 +16,7 @@ struct SettingsView: View {
 
     @State private var selectedIDs: Set<UUID> = []
     @State private var editingTarget: EditTarget?
+    @State private var showCarPlaySimulation = false
 
     private enum EditTarget: Identifiable {
         case add
@@ -64,6 +65,9 @@ struct SettingsView: View {
                 ConnectionEditView(existing: connection) { connectionStore.update($0) }
             }
         }
+        .fullScreenCover(isPresented: $showCarPlaySimulation) {
+            CarPlaySimulationView()
+        }
     }
 
     private var header: some View {
@@ -78,8 +82,14 @@ struct SettingsView: View {
                 .font(.title2.bold())
                 .foregroundColor(.white)
             Spacer()
+            Button(action: { showCarPlaySimulation = true }) {
+                Image(systemName: "car.fill")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(.white)
+                    .frame(width: 48, height: 48)
+            }
         }
-        .padding(.leading, 8)
+        .padding(.horizontal, 8)
         .padding(.top, 8)
         .background(Color.black)
     }

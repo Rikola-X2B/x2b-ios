@@ -31,6 +31,9 @@
 		F9C9BDE49CD4D4CF7534C79E /* Color+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7948A7C1F7828607A5AB4A5B /* Color+Hex.swift */; };
 		DA314368076ADE9EABCF148C /* AppVersionChecker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 133835BFA3E1063A9DB9ED32 /* AppVersionChecker.swift */; };
 		0E2D3EA1D5FF3E6FB4E34059 /* UIApplication+SafeArea.swift in Sources */ = {isa = PBXBuildFile; fileRef = 119F2328F6B8044B79A79608 /* UIApplication+SafeArea.swift */; };
+		12B4B6991E04A31F86B15459 /* CarPlayControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB408154867D16F23C019E0E /* CarPlayControl.swift */; };
+		77AD9399B8F0C6A1A3A59C0F /* CarPlaySimulationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C7397BCEEC8EACFABBE6A5 /* CarPlaySimulationStore.swift */; };
+		05F922A9D6466B30A3EB3CA1 /* CarPlaySimulationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E7593779B14EBCD3618E88 /* CarPlaySimulationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -80,6 +83,9 @@
 		C74EB409EE209E51E0BCE334 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		424DDAAD41028EE1C3E663A4 /* x2b.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = x2b.entitlements; sourceTree = "<group>"; };
 		119F2328F6B8044B79A79608 /* UIApplication+SafeArea.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+SafeArea.swift"; sourceTree = "<group>"; };
+		FB408154867D16F23C019E0E /* CarPlayControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlayControl.swift; sourceTree = "<group>"; };
+		20C7397BCEEC8EACFABBE6A5 /* CarPlaySimulationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySimulationStore.swift; sourceTree = "<group>"; };
+		77E7593779B14EBCD3618E88 /* CarPlaySimulationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySimulationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +143,7 @@
 				5A99B600525DCC683E360536 /* WebView */,
 				785D6839D7E01C38A4CC5BDA /* Views */,
 				A88EA087678031B466CF43E1 /* Push */,
+				ACBCC6878EA61EF88A6EDD27 /* CarPlay */,
 				907524DF3587CFFFBFF17683 /* Support */,
 				C74EB409EE209E51E0BCE334 /* Info.plist */,
 				424DDAAD41028EE1C3E663A4 /* x2b.entitlements */,
@@ -151,8 +158,18 @@
 			children = (
 				2B286566E806B62CC738A309 /* Connection.swift */,
 				90643FA63772C8AE6AE4C7FD /* ConnectionStore.swift */,
+				FB408154867D16F23C019E0E /* CarPlayControl.swift */,
 			);
 			path = Models;
+			sourceTree = "<group>";
+		};
+		ACBCC6878EA61EF88A6EDD27 /* CarPlay */ = {
+			isa = PBXGroup;
+			children = (
+				20C7397BCEEC8EACFABBE6A5 /* CarPlaySimulationStore.swift */,
+				77E7593779B14EBCD3618E88 /* CarPlaySimulationView.swift */,
+			);
+			path = CarPlay;
 			sourceTree = "<group>";
 		};
 		677161D272CC3DC084121019 /* Networking */ = {
@@ -379,6 +396,9 @@
 				F9C9BDE49CD4D4CF7534C79E /* Color+Hex.swift in Sources */,
 				DA314368076ADE9EABCF148C /* AppVersionChecker.swift in Sources */,
 				0E2D3EA1D5FF3E6FB4E34059 /* UIApplication+SafeArea.swift in Sources */,
+				12B4B6991E04A31F86B15459 /* CarPlayControl.swift in Sources */,
+				77AD9399B8F0C6A1A3A59C0F /* CarPlaySimulationStore.swift in Sources */,
+				05F922A9D6466B30A3EB3CA1 /* CarPlaySimulationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
