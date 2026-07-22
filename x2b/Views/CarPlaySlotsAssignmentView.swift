@@ -81,7 +81,10 @@ struct CarPlaySlotsAssignmentView: View {
                 }
             }
         }
-        .onAppear { client.connect(baseUrl: connection.url) }
+        // Only need the static list of names to pick from here, not live values -
+        // registering for updates on every one of the box's controls just means it
+        // keeps re-sending values this dialog never displays, for as long as it's open.
+        .onAppear { client.connect(baseUrl: connection.url, trackLiveUpdates: false) }
         .onDisappear { client.disconnect() }
         .onChange(of: client.controls) { _, newControls in
             sortedControls = newControls.values.sorted { $0.name < $1.name }

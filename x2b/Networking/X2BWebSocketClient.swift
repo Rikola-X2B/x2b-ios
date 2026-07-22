@@ -8,9 +8,10 @@ import Foundation
 /// Live connection to a box over the X2BCP WebSocket API at
 /// `{ws|wss}://{host}/ws/x2b`.
 ///
-/// On connect: asks for the full control list (`GetControls`), then subscribes to all
-/// of them (`RegisterControls`) so the box pushes `ControlValueUpdate` messages
-/// whenever something changes. Reconnects with exponential backoff on drop.
+/// On connect: asks for the full control list (`GetControls`), then - unless told not
+/// to via `connect(baseUrl:trackLiveUpdates:)` - subscribes to all of them
+/// (`RegisterControls`) so the box pushes `ControlValueUpdate` messages whenever
+/// something changes. Reconnects with exponential backoff on drop.
 @MainActor
 final class X2BWebSocketClient: ObservableObject {
     @Published private(set) var controls: [Int: X2BControl] = [:]
@@ -26,15 +27,24 @@ final class X2BWebSocketClient: ObservableObject {
     private var reconnectAttempt = 0
     private var isStopped = true
     private var generation = 0
+    private var trackLiveUpdates = true
 
-    /// - Parameter baseUrl: the box's normalized connection URL, e.g.
-    ///   `https://berg.x2.energy` for a hostname or `http://192.168.1.50` for a plain
-    ///   IPv4 address (matching `URLNormalizer`). The websocket scheme mirrors
-    ///   whichever of http/https was used - local boxes without a valid certificate
-    ///   get `ws://`, everything else gets `wss://`.
-    func connect(baseUrl: String) {
+    /// - Parameters:
+    ///   - baseUrl: the box's normalized connection URL, e.g.
+    ///     `https://berg.x2.energy` for a hostname or `http://192.168.1.50` for a
+    ///     plain IPv4 address (matching `URLNormalizer`). The websocket scheme
+    ///     mirrors whichever of http/https was used - local boxes without a valid
+    ///     certificate get `ws://`, everything else gets `wss://`.
+    ///   - trackLiveUpdates: whether to also register for `ControlValueUpdate` pushes
+    ///     after the initial `GetControls` fetch. A caller that only needs the static
+    ///     list once (e.g. to populate a picker of control names) should pass
+    ///     `false` - registering for every control on a box with a large number of
+    ///     them means the box keeps re-sending values that will never be displayed,
+    ///     for as long as that connection stays open.
+    func connect(baseUrl: String, trackLiveUpdates: Bool = true) {
         isStopped = false
         self.baseUrl = baseUrl
+        self.trackLiveUpdates = trackLiveUpdates
         generation += 1
         reconnectAttempt = 0
         Task { await openAndListen(generation: generation) }
@@ -164,6 +174,7 @@ final class X2BWebSocketClient: ObservableObject {
                 return
             }
             apply(controls)
+            guard trackLiveUpdates else { return }
             let ids = controls.map(\.id)
             if !ids.isEmpty {
                 send(X2BWSSOutgoing.RegisterControls(ids: ids))
