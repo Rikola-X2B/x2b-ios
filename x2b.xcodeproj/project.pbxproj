@@ -35,6 +35,10 @@
 		77AD9399B8F0C6A1A3A59C0F /* CarPlaySimulationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20C7397BCEEC8EACFABBE6A5 /* CarPlaySimulationStore.swift */; };
 		05F922A9D6466B30A3EB3CA1 /* CarPlaySimulationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77E7593779B14EBCD3618E88 /* CarPlaySimulationView.swift */; };
 		6D49DFB8BEA3A4004C4D5558 /* CarPlaySceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C26D999A91B9EE793B3C3EFB /* CarPlaySceneDelegate.swift */; };
+		96FB36CFF6B3CDAFF64E8063 /* X2BControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E8E24AA13A95457CD943EA /* X2BControl.swift */; };
+		B5245823590250441F5E6577 /* X2BWSSMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2908FD187EBE73991B6230 /* X2BWSSMessage.swift */; };
+		E9CFFBD29A44A612E73DE3EC /* WebViewCookies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C50DC2C239015C43F77486 /* WebViewCookies.swift */; };
+		76EFF4641E7D6D98C2FDEBA7 /* X2BWebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7105950BAB6A71CC9228254A /* X2BWebSocketClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,6 +92,10 @@
 		20C7397BCEEC8EACFABBE6A5 /* CarPlaySimulationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySimulationStore.swift; sourceTree = "<group>"; };
 		77E7593779B14EBCD3618E88 /* CarPlaySimulationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySimulationView.swift; sourceTree = "<group>"; };
 		C26D999A91B9EE793B3C3EFB /* CarPlaySceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySceneDelegate.swift; sourceTree = "<group>"; };
+		A6E8E24AA13A95457CD943EA /* X2BControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BControl.swift; sourceTree = "<group>"; };
+		FF2908FD187EBE73991B6230 /* X2BWSSMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BWSSMessage.swift; sourceTree = "<group>"; };
+		82C50DC2C239015C43F77486 /* WebViewCookies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewCookies.swift; sourceTree = "<group>"; };
+		7105950BAB6A71CC9228254A /* X2BWebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BWebSocketClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -161,6 +169,7 @@
 				2B286566E806B62CC738A309 /* Connection.swift */,
 				90643FA63772C8AE6AE4C7FD /* ConnectionStore.swift */,
 				FB408154867D16F23C019E0E /* CarPlayControl.swift */,
+				A6E8E24AA13A95457CD943EA /* X2BControl.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -181,6 +190,9 @@
 				3883269AF266ADC10EA22957 /* URLNormalizer.swift */,
 				D4BAC9D6B664BBC83C999E50 /* AppConfigService.swift */,
 				085B83F5E4397F7E133101DF /* PushTokenService.swift */,
+				82C50DC2C239015C43F77486 /* WebViewCookies.swift */,
+				FF2908FD187EBE73991B6230 /* X2BWSSMessage.swift */,
+				7105950BAB6A71CC9228254A /* X2BWebSocketClient.swift */,
 			);
 			path = Networking;
 			sourceTree = "<group>";
@@ -403,6 +415,10 @@
 				77AD9399B8F0C6A1A3A59C0F /* CarPlaySimulationStore.swift in Sources */,
 				05F922A9D6466B30A3EB3CA1 /* CarPlaySimulationView.swift in Sources */,
 				6D49DFB8BEA3A4004C4D5558 /* CarPlaySceneDelegate.swift in Sources */,
+				96FB36CFF6B3CDAFF64E8063 /* X2BControl.swift in Sources */,
+				B5245823590250441F5E6577 /* X2BWSSMessage.swift in Sources */,
+				E9CFFBD29A44A612E73DE3EC /* WebViewCookies.swift in Sources */,
+				76EFF4641E7D6D98C2FDEBA7 /* X2BWebSocketClient.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -4,7 +4,6 @@
 //
 
 import Foundation
-import WebKit
 
 /// Registers/unregisters this device's push token with the currently active X2B box,
 /// mirroring `MainActivity.registerTokenToBox` / `unregisterTokenFromBox` on Android.
@@ -30,7 +29,7 @@ enum PushTokenService {
 
         // Session cookies from the WebView are forwarded, same as Android forwards
         // its CookieManager cookies, so the box can authenticate the request.
-        if let cookieHeader = await cookieHeader(for: baseUrl), !cookieHeader.isEmpty {
+        if let cookieHeader = await WebViewCookies.header(for: baseUrl), !cookieHeader.isEmpty {
             request.setValue(cookieHeader, forHTTPHeaderField: "Cookie")
         }
 
@@ -42,13 +41,5 @@ enum PushTokenService {
         request.httpBody = try? JSONSerialization.data(withJSONObject: payload)
 
         _ = try? await URLSession.shared.data(for: request)
-    }
-
-    private static func cookieHeader(for baseUrl: String) async -> String? {
-        guard let host = URL(string: baseUrl)?.host else { return nil }
-        let cookies = await WKWebsiteDataStore.default().httpCookieStore.allCookies()
-        let matching = cookies.filter { host.hasSuffix($0.domain) || $0.domain.hasSuffix(host) }
-        guard !matching.isEmpty else { return nil }
-        return matching.map { "\($0.name)=\($0.value)" }.joined(separator: "; ")
     }
 }
