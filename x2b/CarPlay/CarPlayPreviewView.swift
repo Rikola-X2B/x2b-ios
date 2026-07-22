@@ -1,16 +1,16 @@
 //
-//  CarPlaySimulationView.swift
+//  CarPlayPreviewView.swift
 //  x2b
 //
 
 import SwiftUI
 
-/// A local mockup of what the CarPlay dashboard would look like: an X2B-branded
-/// background with 8 control tiles laid over it. No network calls - this exists to
-/// validate the layout/interaction before the real CarPlay entitlement is approved
-/// and before the box exposes the `/api/v1` entity endpoints.
-struct CarPlaySimulationView: View {
-    @StateObject private var store = CarPlaySimulationStore.shared
+/// Phone-side preview of what the CarPlay screen shows for the active connection:
+/// the same 8 slots, the same live data, the same `CarPlayEntityStore` - just
+/// rendered with SwiftUI instead of `CPGridTemplate` so it can be tried out without
+/// a car or the CarPlay Simulator.
+struct CarPlayPreviewView: View {
+    @StateObject private var store = CarPlayEntityStore.shared
     @Environment(\.dismiss) private var dismiss
 
     private let columns = [
@@ -30,8 +30,8 @@ struct CarPlaySimulationView: View {
                         .opacity(0.08)
 
                     LazyVGrid(columns: columns, spacing: 20) {
-                        ForEach(CarPlayControl.simulationSet) { control in
-                            CarPlayControlTile(control: control, store: store)
+                        ForEach(store.slots) { slot in
+                            CarPlaySlotTile(slot: slot, store: store)
                         }
                     }
                     .padding(28)
@@ -45,7 +45,7 @@ struct CarPlaySimulationView: View {
             )
             .padding(20)
             .background(Color.black)
-            .navigationTitle("CarPlay (Simulation)")
+            .navigationTitle("CarPlay – Vorschau")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -53,35 +53,47 @@ struct CarPlaySimulationView: View {
                         .foregroundColor(.white)
                 }
                 ToolbarItem(placement: .topBarTrailing) {
-                    // Mirrors the connection-status button in the real CarPlay nav
-                    // bar - simulated only, tap to try out both states.
-                    Button(action: { store.toggleConnection() }) {
-                        Image(systemName: store.isConnected ? "wifi" : "wifi.slash")
-                            .foregroundColor(store.isConnected ? Color(hex: "4CAF50") : Color(hex: "E53935"))
-                    }
+                    Image(systemName: store.isConnected ? "wifi" : "wifi.slash")
+                        .foregroundColor(store.isConnected ? Color(hex: "4CAF50") : Color(hex: "E53935"))
                 }
             }
         }
         .preferredColorScheme(.dark)
+        .onAppear { store.acquire() }
+        .onDisappear { store.release() }
     }
 }
 
-private struct CarPlayControlTile: View {
-    let control: CarPlayControl
-    @ObservedObject var store: CarPlaySimulationStore
+private struct CarPlaySlotTile: View {
+    let slot: CarPlaySlotAssignment
+    @ObservedObject var store: CarPlayEntityStore
+
+    private var control: X2BControl? { store.control(for: slot) }
+    private var isOn: Bool { control?.value.boolValue ?? false }
+    private var isAssigned: Bool { control != nil }
+
+    private var isActionable: Bool {
+        guard let control else { return false }
+        return control.alterable && slot.type.behavior != .readOnly
+    }
 
     var body: some View {
-        Button(action: performAction) {
-            VStack(spacing: 8) {
-                Image(systemName: control.icon(isOn: isOn))
+        Button(action: { store.performAction(for: slot) }) {
+            VStack(spacing: 6) {
+                Image(systemName: slot.type.icon(isOn: isOn))
                     .font(.system(size: 26, weight: .semibold))
                     .foregroundColor(iconColor)
-                Text(control.name)
+                Text(control?.name ?? slot.controlName ?? slot.type.displayName)
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(.white)
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
+                if slot.type.behavior == .readOnly, case .string(let text)? = control?.value {
+                    Text(text)
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor(Color(hex: "2196F3"))
+                }
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 14)
@@ -89,46 +101,37 @@ private struct CarPlayControlTile: View {
             .clipShape(RoundedRectangle(cornerRadius: 14))
             .overlay(
                 RoundedRectangle(cornerRadius: 14)
-                    .strokeBorder(borderColor, lineWidth: isFired ? 2 : 1)
+                    .strokeBorder(borderColor, lineWidth: 1)
             )
-            .scaleEffect(isFired ? 0.95 : 1)
+            .opacity(isAssigned ? 1 : 0.4)
         }
         .buttonStyle(.plain)
-        .animation(.easeOut(duration: 0.15), value: isFired)
+        .disabled(!isActionable)
     }
 
-    private var isOn: Bool { store.isOn(control) }
-    private var isFired: Bool { store.recentlyFired.contains(control.id) }
-
     private var iconColor: Color {
-        switch control.kind {
+        guard isAssigned else { return Color(hex: "555555") }
+        switch slot.type.behavior {
         case .toggle: return isOn ? Color(hex: "4CAF50") : Color(hex: "AAAAAA")
         case .scene: return Color(hex: "2196F3")
+        case .readOnly: return Color(hex: "AAAAAA")
         }
     }
 
     private var tileBackground: Color {
-        switch control.kind {
+        guard isAssigned else { return Color(hex: "2A2A2A") }
+        switch slot.type.behavior {
         case .toggle: return isOn ? Color(hex: "4CAF50").opacity(0.18) : Color(hex: "2A2A2A")
-        case .scene: return isFired ? Color(hex: "2196F3").opacity(0.3) : Color(hex: "2A2A2A")
+        case .scene, .readOnly: return Color(hex: "2A2A2A")
         }
     }
 
     private var borderColor: Color {
-        switch control.kind {
+        guard isAssigned else { return Color.white.opacity(0.05) }
+        switch slot.type.behavior {
         case .toggle: return isOn ? Color(hex: "4CAF50") : Color.white.opacity(0.08)
-        case .scene: return Color(hex: "2196F3").opacity(isFired ? 0.9 : 0.3)
+        case .scene: return Color(hex: "2196F3").opacity(0.3)
+        case .readOnly: return Color.white.opacity(0.08)
         }
     }
-
-    private func performAction() {
-        switch control.kind {
-        case .toggle: store.toggle(control)
-        case .scene: store.fireScene(control)
-        }
-    }
-}
-
-#Preview {
-    CarPlaySimulationView()
 }

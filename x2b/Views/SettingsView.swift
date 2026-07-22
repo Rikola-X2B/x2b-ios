@@ -16,7 +16,7 @@ struct SettingsView: View {
 
     @State private var selectedIDs: Set<UUID> = []
     @State private var editingTarget: EditTarget?
-    @State private var showCarPlaySimulation = false
+    @State private var showCarPlayPreview = false
     @State private var assigningCarPlayConnection: Connection?
 
     private enum EditTarget: Identifiable {
@@ -66,8 +66,8 @@ struct SettingsView: View {
                 ConnectionEditView(existing: connection) { connectionStore.update($0) }
             }
         }
-        .fullScreenCover(isPresented: $showCarPlaySimulation) {
-            CarPlaySimulationView()
+        .fullScreenCover(isPresented: $showCarPlayPreview) {
+            CarPlayPreviewView()
         }
         .sheet(item: $assigningCarPlayConnection) { connection in
             CarPlaySlotsAssignmentView(connection: connection) { connectionStore.update($0) }
@@ -86,7 +86,7 @@ struct SettingsView: View {
                 .font(.title2.bold())
                 .foregroundColor(.white)
             Spacer()
-            Button(action: { showCarPlaySimulation = true }) {
+            Button(action: { showCarPlayPreview = true }) {
                 Image(systemName: "car.fill")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(.white)
