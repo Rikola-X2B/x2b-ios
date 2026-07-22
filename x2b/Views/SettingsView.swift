@@ -17,6 +17,7 @@ struct SettingsView: View {
     @State private var selectedIDs: Set<UUID> = []
     @State private var editingTarget: EditTarget?
     @State private var showCarPlaySimulation = false
+    @State private var assigningCarPlayConnection: Connection?
 
     private enum EditTarget: Identifiable {
         case add
@@ -67,6 +68,9 @@ struct SettingsView: View {
         }
         .fullScreenCover(isPresented: $showCarPlaySimulation) {
             CarPlaySimulationView()
+        }
+        .sheet(item: $assigningCarPlayConnection) { connection in
+            CarPlaySlotsAssignmentView(connection: connection) { connectionStore.update($0) }
         }
     }
 
@@ -128,7 +132,8 @@ struct SettingsView: View {
                         isActive: connection.url == connectionStore.activeConnectionUrl,
                         isSelected: selectedIDs.contains(connection.id),
                         onTap: { toggleSelection(connection.id) },
-                        onPreview: { onPreview(connection.url) }
+                        onPreview: { onPreview(connection.url) },
+                        onAssignCarPlay: { assigningCarPlayConnection = connection }
                     )
                 }
             }
@@ -210,6 +215,7 @@ private struct ConnectionRow: View {
     let isSelected: Bool
     var onTap: () -> Void
     var onPreview: () -> Void
+    var onAssignCarPlay: () -> Void
 
     var body: some View {
         HStack(spacing: 8) {
@@ -246,6 +252,14 @@ private struct ConnectionRow: View {
 
             Button(action: onPreview) {
                 Image(systemName: "eye.fill")
+                    .foregroundColor(.white)
+                    .frame(width: 36, height: 36)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+
+            Button(action: onAssignCarPlay) {
+                Image(systemName: "car.fill")
                     .foregroundColor(.white)
                     .frame(width: 36, height: 36)
                     .contentShape(Rectangle())

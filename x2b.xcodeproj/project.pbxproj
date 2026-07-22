@@ -39,6 +39,8 @@
 		B5245823590250441F5E6577 /* X2BWSSMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2908FD187EBE73991B6230 /* X2BWSSMessage.swift */; };
 		E9CFFBD29A44A612E73DE3EC /* WebViewCookies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C50DC2C239015C43F77486 /* WebViewCookies.swift */; };
 		76EFF4641E7D6D98C2FDEBA7 /* X2BWebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7105950BAB6A71CC9228254A /* X2BWebSocketClient.swift */; };
+		D1AA9670AC645A4EEEC8352A /* CarPlaySlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3780DE09634D6A8E2D0FA9 /* CarPlaySlot.swift */; };
+		771E3A1C875A21B212F0D1D8 /* CarPlaySlotsAssignmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0764CCBA76A2E6564DF15941 /* CarPlaySlotsAssignmentView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -96,6 +98,8 @@
 		FF2908FD187EBE73991B6230 /* X2BWSSMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BWSSMessage.swift; sourceTree = "<group>"; };
 		82C50DC2C239015C43F77486 /* WebViewCookies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewCookies.swift; sourceTree = "<group>"; };
 		7105950BAB6A71CC9228254A /* X2BWebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BWebSocketClient.swift; sourceTree = "<group>"; };
+		4E3780DE09634D6A8E2D0FA9 /* CarPlaySlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySlot.swift; sourceTree = "<group>"; };
+		0764CCBA76A2E6564DF15941 /* CarPlaySlotsAssignmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySlotsAssignmentView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -170,6 +174,7 @@
 				90643FA63772C8AE6AE4C7FD /* ConnectionStore.swift */,
 				FB408154867D16F23C019E0E /* CarPlayControl.swift */,
 				A6E8E24AA13A95457CD943EA /* X2BControl.swift */,
+				4E3780DE09634D6A8E2D0FA9 /* CarPlaySlot.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -212,6 +217,7 @@
 				D530721C439C901B5F5175E4 /* SettingsView.swift */,
 				E21DFE11A26DC8DA6F5DF68A /* ConnectionEditView.swift */,
 				E6B42CEEED3320871687BB91 /* ForcedUpdateView.swift */,
+				0764CCBA76A2E6564DF15941 /* CarPlaySlotsAssignmentView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -419,6 +425,8 @@
 				B5245823590250441F5E6577 /* X2BWSSMessage.swift in Sources */,
 				E9CFFBD29A44A612E73DE3EC /* WebViewCookies.swift in Sources */,
 				76EFF4641E7D6D98C2FDEBA7 /* X2BWebSocketClient.swift in Sources */,
+				D1AA9670AC645A4EEEC8352A /* CarPlaySlot.swift in Sources */,
+				771E3A1C875A21B212F0D1D8 /* CarPlaySlotsAssignmentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
