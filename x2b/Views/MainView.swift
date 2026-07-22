@@ -12,9 +12,6 @@ struct MainView: View {
     @ObservedObject var connectionStore: ConnectionStore
     @ObservedObject private var pushManager = PushManager.shared
 
-    /// Non-nil while previewing a connection from Settings without changing the active one,
-    /// mirroring `MainActivity.EXTRA_PREVIEW_URL` / `previewActive`.
-    var previewURL: String?
     var onOpenSettings: () -> Void
 
     @State private var errorMessage: String?
@@ -29,7 +26,7 @@ struct MainView: View {
     @State private var topSafeAreaInset: CGFloat = 0
 
     private var activeURLString: String {
-        previewURL ?? connectionStore.activeConnectionUrl
+        connectionStore.displayedConnection?.url ?? ""
     }
 
     var body: some View {

@@ -6,8 +6,10 @@
 import Foundation
 import Combine
 
-/// Bridges the active connection's `carPlaySlots` assignments to live data from
-/// `X2BWebSocketClient`, for both the real CarPlay grid and the phone-side preview.
+/// Bridges the currently displayed connection's `carPlaySlots` assignments to live
+/// data from `X2BWebSocketClient`, for both the real CarPlay grid and the
+/// phone-side preview - "displayed" so CarPlay follows a "Vorschau" preview too,
+/// not just the persisted active connection.
 ///
 /// Multiple consumers (the CarPlay scene and the phone preview) can be interested at
 /// the same time, so this is reference-counted via `acquire()`/`release()` rather than
@@ -65,7 +67,7 @@ final class CarPlayEntityStore: ObservableObject {
     }
 
     var slots: [CarPlaySlotAssignment] {
-        ConnectionStore.shared.activeConnection?.carPlaySlots ?? CarPlaySlotAssignment.defaultSlots
+        ConnectionStore.shared.displayedConnection?.carPlaySlots ?? CarPlaySlotAssignment.defaultSlots
     }
 
     func control(for slot: CarPlaySlotAssignment) -> X2BControl? {
@@ -88,7 +90,7 @@ final class CarPlayEntityStore: ObservableObject {
     }
 
     private func reconnectIfNeeded() {
-        guard let url = ConnectionStore.shared.activeConnection?.url, url != connectedUrl else { return }
+        guard let url = ConnectionStore.shared.displayedConnection?.url, url != connectedUrl else { return }
         connectedUrl = url
         socket.disconnect()
         socket.connect(baseUrl: url)

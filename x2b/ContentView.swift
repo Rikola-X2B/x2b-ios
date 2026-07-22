@@ -14,20 +14,18 @@ struct ContentView: View {
     @StateObject private var connectionStore = ConnectionStore.shared
 
     @State private var showSettings = false
-    @State private var previewURL: String?
     @State private var requiredUpdate: AppVersionChecker.UpdateInfo?
 
     var body: some View {
         ZStack {
             MainView(
                 connectionStore: connectionStore,
-                previewURL: previewURL,
                 onOpenSettings: {
                     // Opening Settings again ends any active preview, so switching
                     // the active connection there always takes effect immediately -
-                    // otherwise `previewURL` would keep overriding it indefinitely
-                    // for as long as the app process stays alive.
-                    previewURL = nil
+                    // otherwise the preview would keep overriding it indefinitely for
+                    // as long as the app process stays alive.
+                    connectionStore.previewConnectionUrl = nil
                     showSettings = true
                 }
             )
@@ -38,7 +36,7 @@ struct ContentView: View {
         }
         .sheet(isPresented: $showSettings) {
             SettingsView(connectionStore: connectionStore) { url in
-                previewURL = url
+                connectionStore.previewConnectionUrl = url
                 showSettings = false
             }
         }

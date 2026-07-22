@@ -11,10 +11,18 @@ import Combine
 final class ConnectionStore: ObservableObject {
     static let shared = ConnectionStore()
 
-    static let demoURL = "https://demo.x2.energy"
+    /// No longer seeded automatically - kept only to clean up any copy left over
+    /// from before on existing installs.
+    private static let legacyDemoURL = "https://demo.x2.energy"
 
     @Published private(set) var connections: [Connection] = []
     @Published private(set) var activeConnectionUrl: String = ""
+
+    /// Non-nil while "Vorschau" (the eye button in Settings) is showing a connection
+    /// other than the active one. Lives here rather than as view-local state so
+    /// CarPlay - which has no view of its own to read it from - can still follow
+    /// whatever box the phone screen is actually displaying.
+    @Published var previewConnectionUrl: String?
 
     /// Whether the visualization is shown edge-to-edge or with a reserved status-bar area.
     @Published var edgeToEdge: Bool {
@@ -36,7 +44,7 @@ final class ConnectionStore: ObservableObject {
         load()
     }
 
-    /// Reloads connections from storage, seeding the built-in demo connection if missing.
+    /// Reloads connections from storage.
     func load() {
         var loaded: [Connection] = []
         if let data = defaults.data(forKey: Keys.connections),
@@ -44,14 +52,17 @@ final class ConnectionStore: ObservableObject {
             loaded = decoded
         }
 
-        if !loaded.contains(where: { $0.url.contains("demo.x2.energy") }) {
-            loaded.insert(Connection(name: "demo", url: Self.demoURL), at: 0)
-        }
+        // The demo connection used to be seeded automatically on first launch - drop
+        // any leftover copy so existing installs don't have to delete it by hand.
+        loaded.removeAll { $0.url == Self.legacyDemoURL }
 
         connections = loaded
         persist()
 
-        if activeConnectionUrl.isEmpty, let first = connections.first {
+        // Also covers the active connection having been the just-removed demo entry,
+        // or any other connection that's no longer present (e.g. deleted) - in every
+        // case, fall back to whatever is first rather than pointing at nothing.
+        if !connections.contains(where: { $0.url == activeConnectionUrl }), let first = connections.first {
             setActive(url: first.url)
         }
     }
@@ -79,6 +90,16 @@ final class ConnectionStore: ObservableObject {
 
     var activeConnection: Connection? {
         connections.first(where: { $0.url == activeConnectionUrl }) ?? connections.first
+    }
+
+    /// The connection actually shown on screen right now - the previewed one while a
+    /// preview is active, otherwise the active one. CarPlay follows this rather than
+    /// `activeConnection` so it always matches what the phone is currently displaying.
+    var displayedConnection: Connection? {
+        if let previewConnectionUrl, let previewed = connections.first(where: { $0.url == previewConnectionUrl }) {
+            return previewed
+        }
+        return activeConnection
     }
 
     private func persist() {
