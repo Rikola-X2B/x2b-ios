@@ -53,6 +53,7 @@ final class X2BWebSocketClient: ObservableObject {
     }
 
     func setControlValue(id: Int, value: X2BControlValue) {
+        print("🔎 [X2BWS] sending SetControlValue id=\(id) value=\(value)")
         send(X2BWSSOutgoing.SetControlValue(id: id, value: value))
     }
 
@@ -139,25 +140,40 @@ final class X2BWebSocketClient: ObservableObject {
 
     private func handle(_ message: URLSessionWebSocketTask.Message) {
         guard case .string(let text) = message, let data = text.data(using: .utf8) else { return }
-        guard let decoded = X2BWSSIncoming.decode(data) else { return }
+        print("🔎 [X2BWS] received: \(text)")
+        guard let decoded = X2BWSSIncoming.decode(data) else {
+            print("🔎 [X2BWS] could not decode the message above into any known type")
+            return
+        }
 
         switch decoded {
         case .getControlsResponse(let response):
             // Per the API's error rules, ignore any data if an error is present -
             // it may be absent or invalid, not just an empty success.
-            guard response.errorCode == nil, let controls = response.controls else { return }
+            guard response.errorCode == nil, let controls = response.controls else {
+                print("🔎 [X2BWS] GetControlsResponse had an error or no controls: \(response.errorMessage ?? "nil")")
+                return
+            }
             apply(controls)
             let ids = controls.map(\.id)
             if !ids.isEmpty {
                 send(X2BWSSOutgoing.RegisterControls(ids: ids))
             }
         case .registerControlsResponse(let response):
-            guard response.errorCode == nil, let controls = response.controls else { return }
+            guard response.errorCode == nil, let controls = response.controls else {
+                print("🔎 [X2BWS] RegisterControlsResponse had an error or no controls: \(response.errorMessage ?? "nil")")
+                return
+            }
             apply(controls)
         case .controlValueUpdate(let update):
+            print("🔎 [X2BWS] ControlValueUpdate for ids \(update.controls.map(\.id)) -> \(update.controls.map(\.value))")
             apply(update.controls)
         case .setControlValueResponse(let response):
-            guard response.errorCode == nil, let control = response.control else { return }
+            guard response.errorCode == nil, let control = response.control else {
+                print("🔎 [X2BWS] SetControlValueResponse had an error or no control: \(response.errorMessage ?? "nil")")
+                return
+            }
+            print("🔎 [X2BWS] SetControlValueResponse for id \(control.id) -> \(control.value)")
             apply([control])
         }
     }
@@ -171,7 +187,11 @@ final class X2BWebSocketClient: ObservableObject {
     private func send<T: Encodable>(_ message: T) {
         guard let data = try? JSONEncoder().encode(message),
               let text = String(data: data, encoding: .utf8) else { return }
-        task?.send(.string(text)) { _ in }
+        task?.send(.string(text)) { error in
+            if let error {
+                print("🔎 [X2BWS] send failed: \(error.localizedDescription)")
+            }
+        }
     }
 
     private func scheduleReconnect(generation: Int) {
