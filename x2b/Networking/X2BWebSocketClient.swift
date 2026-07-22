@@ -5,7 +5,7 @@
 
 import Foundation
 
-/// Live connection to a box over the X2BWSS protocol at `wss://{host}/ws/x2b`.
+/// Live connection to a box over the X2BWSS protocol at `{ws|wss}://{host}/ws/x2b`.
 ///
 /// On connect: asks for the full control list (`GetControls`), then subscribes to all
 /// of them (`RegisterControls`) so the box pushes `ControlStatusUpdate` messages
@@ -16,14 +16,22 @@ final class X2BWebSocketClient: ObservableObject {
     @Published private(set) var isConnected = false
 
     private var task: URLSessionWebSocketTask?
-    private var host: String?
+    /// The connection's normalized http(s) base URL (e.g. from `Connection.url`) -
+    /// kept as-is rather than split into host/scheme upfront, since the ws/wss
+    /// scheme and cookie lookup both need to derive from it.
+    private var baseUrl: String?
     private var reconnectAttempt = 0
     private var isStopped = true
     private var generation = 0
 
-    func connect(host: String) {
+    /// - Parameter baseUrl: the box's normalized connection URL, e.g.
+    ///   `https://berg.x2.energy` for a hostname or `http://192.168.1.50` for a plain
+    ///   IPv4 address (matching `URLNormalizer`). The websocket scheme mirrors
+    ///   whichever of http/https was used - local boxes without a valid certificate
+    ///   get `ws://`, everything else gets `wss://`.
+    func connect(baseUrl: String) {
         isStopped = false
-        self.host = host
+        self.baseUrl = baseUrl
         generation += 1
         reconnectAttempt = 0
         Task { await openAndListen(generation: generation) }
@@ -43,12 +51,11 @@ final class X2BWebSocketClient: ObservableObject {
     }
 
     private func openAndListen(generation: Int) async {
-        guard !isStopped, let host else { return }
-        guard let url = URL(string: "wss://\(host)/ws/x2b") else { return }
+        guard !isStopped, let baseUrl, let url = webSocketURL(from: baseUrl) else { return }
 
         var request = URLRequest(url: url)
         request.setValue("X2BWSS", forHTTPHeaderField: "Sec-WebSocket-Protocol")
-        if let cookieHeader = await WebViewCookies.header(for: "https://\(host)") {
+        if let cookieHeader = await WebViewCookies.header(for: baseUrl) {
             request.setValue(cookieHeader, forHTTPHeaderField: "Cookie")
         }
 
@@ -80,6 +87,15 @@ final class X2BWebSocketClient: ObservableObject {
                 }
             }
         }
+    }
+
+    /// Mirrors the base URL's scheme (http -> ws, https -> wss) and carries over its
+    /// host/port, e.g. `http://192.168.1.50` -> `ws://192.168.1.50/ws/x2b`.
+    private func webSocketURL(from baseUrl: String) -> URL? {
+        guard var components = URLComponents(string: baseUrl), components.host != nil else { return nil }
+        components.scheme = components.scheme == "https" ? "wss" : "ws"
+        components.path = "/ws/x2b"
+        return components.url
     }
 
     private func handle(_ message: URLSessionWebSocketTask.Message) {
