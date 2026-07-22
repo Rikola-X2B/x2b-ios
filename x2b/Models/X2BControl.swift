@@ -5,13 +5,26 @@
 
 import Foundation
 
-/// A single control as reported by the box over the X2BWSS WebSocket protocol -
-/// e.g. `{ "id": 1234567890001273, "type": "switch", "name": "Garagentor", "value": true }`.
+/// A single control as reported by the box over the X2BCP WebSocket API - e.g.
+/// `{ "id": 1234567890001273, "type": "switch", "name": "Garagentor", "value": true,
+/// "alterable": true }`.
+///
+/// The API defines exactly four `type` values: `"switch"` (bool on/off),
+/// `"pushButton"` (bool, turns itself back off after a moment - used for scenes),
+/// `"text"` (display-only string), and `"light"` (bool on/off, semantically a light).
+/// `alterable` is false for display-only controls *and* for controls the user simply
+/// isn't allowed/able to operate right now, independent of `type`.
 struct X2BControl: Codable, Identifiable, Equatable {
+    static let typeSwitch = "switch"
+    static let typePushButton = "pushButton"
+    static let typeText = "text"
+    static let typeLight = "light"
+
     let id: Int
     let type: String
     let name: String
     let value: X2BControlValue
+    let alterable: Bool
 }
 
 /// A control's `value` can be a bool, a number, a string, or unknown/undefined (null) -

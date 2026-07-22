@@ -5,10 +5,11 @@
 
 import Foundation
 
-/// Live connection to a box over the X2BWSS protocol at `{ws|wss}://{host}/ws/x2b`.
+/// Live connection to a box over the X2BCP WebSocket API at
+/// `{ws|wss}://{host}/ws/x2b`.
 ///
 /// On connect: asks for the full control list (`GetControls`), then subscribes to all
-/// of them (`RegisterControls`) so the box pushes `ControlStatusUpdate` messages
+/// of them (`RegisterControls`) so the box pushes `ControlValueUpdate` messages
 /// whenever something changes. Reconnects with exponential backoff on drop.
 @MainActor
 final class X2BWebSocketClient: ObservableObject {
@@ -54,7 +55,7 @@ final class X2BWebSocketClient: ObservableObject {
         guard !isStopped, let baseUrl, let url = webSocketURL(from: baseUrl) else { return }
 
         var request = URLRequest(url: url)
-        request.setValue("X2BWSS", forHTTPHeaderField: "Sec-WebSocket-Protocol")
+        request.setValue("X2BCP", forHTTPHeaderField: "Sec-WebSocket-Protocol")
         if let cookieHeader = await WebViewCookies.header(for: baseUrl) {
             request.setValue(cookieHeader, forHTTPHeaderField: "Cookie")
         }
@@ -104,15 +105,22 @@ final class X2BWebSocketClient: ObservableObject {
 
         switch decoded {
         case .getControlsResponse(let response):
-            apply(response.controls)
-            let ids = response.controls.map(\.id)
+            // Per the API's error rules, ignore any data if an error is present -
+            // it may be absent or invalid, not just an empty success.
+            guard response.errorCode == nil, let controls = response.controls else { return }
+            apply(controls)
+            let ids = controls.map(\.id)
             if !ids.isEmpty {
                 send(X2BWSSOutgoing.RegisterControls(ids: ids))
             }
         case .registerControlsResponse(let response):
-            apply(response.controls)
-        case .controlStatusUpdate(let update):
+            guard response.errorCode == nil, let controls = response.controls else { return }
+            apply(controls)
+        case .controlValueUpdate(let update):
             apply(update.controls)
+        case .setControlValueResponse(let response):
+            guard response.errorCode == nil, let control = response.control else { return }
+            apply([control])
         }
     }
 
