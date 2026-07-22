@@ -53,7 +53,6 @@ final class X2BWebSocketClient: ObservableObject {
     }
 
     func setControlValue(id: Int, value: X2BControlValue) {
-        print("🔎 [X2BWS] sending SetControlValue id=\(id) value=\(value)")
         send(X2BWSSOutgoing.SetControlValue(id: id, value: value))
     }
 
@@ -197,6 +196,7 @@ final class X2BWebSocketClient: ObservableObject {
     private func send<T: Encodable>(_ message: T) {
         guard let data = try? JSONEncoder().encode(message),
               let text = String(data: data, encoding: .utf8) else { return }
+        print("🔎 [X2BWS] sending: \(text)")
         task?.send(.string(text)) { error in
             if let error {
                 print("🔎 [X2BWS] send failed: \(error.localizedDescription)")
