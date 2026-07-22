@@ -52,6 +52,14 @@ struct CarPlaySimulationView: View {
                     Button("Schließen") { dismiss() }
                         .foregroundColor(.white)
                 }
+                ToolbarItem(placement: .topBarTrailing) {
+                    // Mirrors the connection-status button in the real CarPlay nav
+                    // bar - simulated only, tap to try out both states.
+                    Button(action: { store.toggleConnection() }) {
+                        Image(systemName: store.isConnected ? "wifi" : "wifi.slash")
+                            .foregroundColor(store.isConnected ? Color(hex: "4CAF50") : Color(hex: "E53935"))
+                    }
+                }
             }
         }
         .preferredColorScheme(.dark)

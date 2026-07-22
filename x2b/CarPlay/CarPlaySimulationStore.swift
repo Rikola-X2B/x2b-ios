@@ -17,6 +17,15 @@ final class CarPlaySimulationStore: ObservableObject {
     @Published private(set) var onStates: [String: Bool] = [:]
     @Published private(set) var recentlyFired: Set<String> = []
 
+    /// Simulated box connection status - no real reachability check against the box
+    /// yet, since `/api/v1.1` doesn't exist there yet. Tappable in both the CarPlay
+    /// nav bar and the phone mockup so the visual states can be tried out.
+    @Published var isConnected: Bool = true
+
+    func toggleConnection() {
+        isConnected.toggle()
+    }
+
     func isOn(_ control: CarPlayControl) -> Bool {
         onStates[control.id] ?? false
     }

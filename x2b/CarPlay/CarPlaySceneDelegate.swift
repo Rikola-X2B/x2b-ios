@@ -55,9 +55,23 @@ final class CarPlaySceneDelegate: NSObject, @preconcurrency CPTemplateApplicatio
         // No title text - CPGridTemplate has no API for a custom background/logo
         // image (CarPlay renders that chrome itself), and the app's own icon
         // already shows in the CarPlay sidebar, so a redundant "X2B" text title
-        // isn't worth the space.
+        // isn't worth the space. The freed-up top area instead gets a connection
+        // status icon via the nav bar buttons every CPTemplate supports.
         let buttons = CarPlayControl.simulationSet.map(gridButton)
-        return CPGridTemplate(title: nil, gridButtons: buttons)
+        let template = CPGridTemplate(title: nil, gridButtons: buttons)
+        template.trailingNavigationBarButtons = [connectionStatusButton()]
+        return template
+    }
+
+    private func connectionStatusButton() -> CPBarButton {
+        // Simulated only - no real reachability check against the box yet, since
+        // /api/v1.1 doesn't exist there yet. Tapping it toggles the simulated state
+        // so both visual states can be tried out.
+        let symbolName = store.isConnected ? "wifi" : "wifi.slash"
+        let image = UIImage(systemName: symbolName) ?? UIImage()
+        return CPBarButton(image: image) { [weak self] _ in
+            self?.store.toggleConnection()
+        }
     }
 
     private func gridButton(for control: CarPlayControl) -> CPGridButton {
@@ -81,5 +95,6 @@ final class CarPlaySceneDelegate: NSObject, @preconcurrency CPTemplateApplicatio
     private func refreshGrid() {
         guard let gridTemplate = interfaceController?.rootTemplate as? CPGridTemplate else { return }
         gridTemplate.updateGridButtons(CarPlayControl.simulationSet.map(gridButton))
+        gridTemplate.trailingNavigationBarButtons = [connectionStatusButton()]
     }
 }
