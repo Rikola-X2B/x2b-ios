@@ -15,6 +15,12 @@ struct CarPlaySlotsAssignmentView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var client = X2BWebSocketClient()
     @State private var slots: [CarPlaySlotAssignment]
+    // Sorted once here instead of as a computed property read directly from
+    // `client.controls` - that property was being re-sorted from scratch on every
+    // single access, and each of the 8 slots' "Control" pickers reads it once per
+    // body evaluation, so a box with many controls made the whole list noticeably
+    // slow to become responsive while updates were still coming in.
+    @State private var sortedControls: [X2BControl] = []
 
     init(connection: Connection, onSave: @escaping (Connection) -> Void) {
         self.connection = connection
@@ -77,10 +83,9 @@ struct CarPlaySlotsAssignmentView: View {
         }
         .onAppear { client.connect(baseUrl: connection.url) }
         .onDisappear { client.disconnect() }
-    }
-
-    private var sortedControls: [X2BControl] {
-        client.controls.values.sorted { $0.name < $1.name }
+        .onChange(of: client.controls) { _, newControls in
+            sortedControls = newControls.values.sorted { $0.name < $1.name }
+        }
     }
 
     /// If the box hasn't reported this slot's previously-assigned control yet (e.g.
