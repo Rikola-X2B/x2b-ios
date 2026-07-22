@@ -63,13 +63,23 @@ final class X2BWebSocketClient: ObservableObject {
             return
         }
 
-        var request = URLRequest(url: url)
-        request.setValue("X2BCP", forHTTPHeaderField: "Sec-WebSocket-Protocol")
-        if let cookieHeader = await WebViewCookies.header(for: baseUrl) {
-            request.setValue(cookieHeader, forHTTPHeaderField: "Cookie")
-            print("🔎 [X2BWS] connecting to \(url.absoluteString) with a cookie header")
+        // `webSocketTask(with:protocols:)` is the only initializer that actually
+        // negotiates a Sec-WebSocket-Protocol - setting that header manually on a
+        // plain URLRequest gets silently dropped (the websocket handshake manages
+        // Sec-WebSocket-* headers itself), so the box was never actually being asked
+        // for "X2BCP" at all. That means cookies can't ride along on a request header
+        // either; they're seeded into the session's own cookie storage instead, which
+        // URLSession attaches to matching-domain requests - including this one -
+        // automatically.
+        let configuration = URLSessionConfiguration.default
+        let cookies = await WebViewCookies.matching(for: baseUrl)
+        if !cookies.isEmpty {
+            cookies.forEach { HTTPCookieStorage.shared.setCookie($0) }
+            configuration.httpCookieStorage = .shared
+            configuration.httpCookieAcceptPolicy = .always
+            print("🔎 [X2BWS] connecting to \(url.absoluteString) with \(cookies.count) cookie(s)")
         } else {
-            print("🔎 [X2BWS] connecting to \(url.absoluteString) WITHOUT a cookie header (no matching WebView cookie found for host)")
+            print("🔎 [X2BWS] connecting to \(url.absoluteString) WITHOUT any cookies (no matching WebView cookie found for host)")
         }
 
         // A plain delegate is needed (rather than URLSession.shared) so we can see
@@ -95,11 +105,11 @@ final class X2BWebSocketClient: ObservableObject {
                 }
             }
         )
-        let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
+        let session = URLSession(configuration: configuration, delegate: delegate, delegateQueue: nil)
         sessionDelegate = delegate
         self.session = session
 
-        let newTask = session.webSocketTask(with: request)
+        let newTask = session.webSocketTask(with: url, protocols: ["X2BCP"])
         task = newTask
         newTask.resume()
 
@@ -210,10 +220,9 @@ final class X2BWebSocketClient: ObservableObject {
 /// whether the HTTP upgrade handshake actually succeeded, and if not, the real HTTP
 /// status/network error behind the failure. Delegate callbacks arrive on the
 /// session's own background queue, not the main actor - callers must hop back
-/// themselves.
-// Delegate callbacks fire on a background queue, i.e. off the main actor - but the
-// only state here is two immutable closures assigned once at init, so this is safe
-// despite the class not being provably Sendable to the compiler.
+/// themselves. The class itself is `@unchecked Sendable` since its only state is two
+/// immutable closures assigned once at init, which is safe despite not being
+/// provably Sendable to the compiler.
 private final class WebSocketSessionDelegate: NSObject, URLSessionWebSocketDelegate, @unchecked Sendable {
     private let onOpen: (String?) -> Void
     private let onComplete: (Error?, URLResponse?) -> Void
