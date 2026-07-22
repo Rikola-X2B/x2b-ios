@@ -66,6 +66,8 @@ struct X2BWebView: UIViewRepresentable {
         var loginDetected = false
         private var memoryWarningObserver: NSObjectProtocol?
         private var lastMemoryWarningReload: Date?
+        private var retryAttempt = 0
+        private var retryTask: Task<Void, Never>?
 
         static let bridgeScript: WKUserScript = {
             let source = """
@@ -101,6 +103,7 @@ struct X2BWebView: UIViewRepresentable {
             if let memoryWarningObserver {
                 NotificationCenter.default.removeObserver(memoryWarningObserver)
             }
+            retryTask?.cancel()
         }
 
         private func reloadAfterMemoryWarning() {
@@ -132,6 +135,9 @@ struct X2BWebView: UIViewRepresentable {
         }
 
         func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+            retryAttempt = 0
+            retryTask?.cancel()
+
             guard let url = webView.url else { return }
             let lower = url.absoluteString.lowercased()
             if lower.contains("login") {
@@ -143,10 +149,43 @@ struct X2BWebView: UIViewRepresentable {
 
         func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
             parent.onLoadError(error.localizedDescription)
+            scheduleRetryIfTransient(error)
         }
 
         func webView(_ webView: WKWebView, didFailProvisionalNavigation navigation: WKNavigation!, withError error: Error) {
             parent.onLoadError(error.localizedDescription)
+            scheduleRetryIfTransient(error)
+        }
+
+        /// A box's hostname can briefly fail to resolve right after app launch (the
+        /// network interface isn't fully up yet) or drop out during a live session -
+        /// without a retry the WebView is stuck on a black screen until the app is
+        /// force-quit and reopened. Only retries error codes that are plausibly
+        /// transient (not e.g. a genuine 404 from the box itself, which retrying
+        /// wouldn't fix), and gives up after a few attempts rather than looping forever.
+        private func scheduleRetryIfTransient(_ error: Error) {
+            let nsError = error as NSError
+            let transientCodes: Set<Int> = [
+                NSURLErrorCannotFindHost,
+                NSURLErrorNotConnectedToInternet,
+                NSURLErrorTimedOut,
+                NSURLErrorNetworkConnectionLost,
+                NSURLErrorDNSLookupFailed,
+                NSURLErrorCannotConnectToHost,
+            ]
+            guard nsError.domain == NSURLErrorDomain, transientCodes.contains(nsError.code) else { return }
+
+            let maxAttempts = 5
+            guard retryAttempt < maxAttempts else { return }
+            retryAttempt += 1
+
+            let delaySeconds = min(2.0 * Double(retryAttempt), 15)
+            retryTask?.cancel()
+            retryTask = Task { [weak self] in
+                try? await Task.sleep(nanoseconds: UInt64(delaySeconds * 1_000_000_000))
+                guard !Task.isCancelled, let self, let webView = self.webView, let url = self.loadedURL else { return }
+                webView.load(URLRequest(url: url))
+            }
         }
 
         private func handleLoginSuccess() {
