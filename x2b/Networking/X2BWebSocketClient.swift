@@ -17,6 +17,8 @@ final class X2BWebSocketClient: ObservableObject {
     @Published private(set) var isConnected = false
 
     private var task: URLSessionWebSocketTask?
+    private var session: URLSession?
+    private var sessionDelegate: WebSocketSessionDelegate?
     /// The connection's normalized http(s) base URL (e.g. from `Connection.url`) -
     /// kept as-is rather than split into host/scheme upfront, since the ws/wss
     /// scheme and cookie lookup both need to derive from it.
@@ -42,7 +44,10 @@ final class X2BWebSocketClient: ObservableObject {
         isStopped = true
         generation += 1
         task?.cancel(with: .goingAway, reason: nil)
+        session?.invalidateAndCancel()
         task = nil
+        session = nil
+        sessionDelegate = nil
         isConnected = false
         controls = [:]
     }
@@ -52,15 +57,48 @@ final class X2BWebSocketClient: ObservableObject {
     }
 
     private func openAndListen(generation: Int) async {
-        guard !isStopped, let baseUrl, let url = webSocketURL(from: baseUrl) else { return }
+        guard !isStopped, let baseUrl, let url = webSocketURL(from: baseUrl) else {
+            print("🔎 [X2BWS] invalid base URL, not connecting: \(baseUrl ?? "nil")")
+            return
+        }
 
         var request = URLRequest(url: url)
         request.setValue("X2BCP", forHTTPHeaderField: "Sec-WebSocket-Protocol")
         if let cookieHeader = await WebViewCookies.header(for: baseUrl) {
             request.setValue(cookieHeader, forHTTPHeaderField: "Cookie")
+            print("🔎 [X2BWS] connecting to \(url.absoluteString) with a cookie header")
+        } else {
+            print("🔎 [X2BWS] connecting to \(url.absoluteString) WITHOUT a cookie header (no matching WebView cookie found for host)")
         }
 
-        let newTask = URLSession.shared.webSocketTask(with: request)
+        // A plain delegate is needed (rather than URLSession.shared) so we can see
+        // *why* the handshake failed - `receive()` alone only ever reports a generic
+        // "socket is not connected" error, with none of the underlying HTTP status or
+        // network error that actually explains it.
+        let delegate = WebSocketSessionDelegate(
+            onOpen: { [weak self] negotiatedProtocol in
+                Task { @MainActor in
+                    guard let self, generation == self.generation else { return }
+                    print("🔎 [X2BWS] handshake succeeded, negotiated protocol: \(negotiatedProtocol ?? "none")")
+                    self.isConnected = true
+                    self.reconnectAttempt = 0
+                }
+            },
+            onComplete: { [weak self] error, response in
+                Task { @MainActor in
+                    guard let self, generation == self.generation else { return }
+                    let status = (response as? HTTPURLResponse)?.statusCode
+                    print("🔎 [X2BWS] socket closed - error: \(error?.localizedDescription ?? "none"), httpStatus: \(status.map(String.init) ?? "n/a")")
+                    self.isConnected = false
+                    self.scheduleReconnect(generation: generation)
+                }
+            }
+        )
+        let session = URLSession(configuration: .default, delegate: delegate, delegateQueue: nil)
+        sessionDelegate = delegate
+        self.session = session
+
+        let newTask = session.webSocketTask(with: request)
         task = newTask
         newTask.resume()
 
@@ -78,13 +116,13 @@ final class X2BWebSocketClient: ObservableObject {
 
                 switch result {
                 case .success(let message):
-                    self.isConnected = true
-                    self.reconnectAttempt = 0
                     self.handle(message)
                     self.listen(on: task, generation: generation)
-                case .failure:
-                    self.isConnected = false
-                    self.scheduleReconnect(generation: generation)
+                case .failure(let error):
+                    // The session delegate's didCompleteWithError already reports the
+                    // real cause and schedules the reconnect - this branch just stops
+                    // the receive loop for the dead task.
+                    print("🔎 [X2BWS] receive failed: \(error.localizedDescription)")
                 }
             }
         }
@@ -145,5 +183,35 @@ final class X2BWebSocketClient: ObservableObject {
             guard generation == self.generation else { return }
             await self.openAndListen(generation: generation)
         }
+    }
+}
+
+/// Reports what `URLSessionWebSocketTask.receive(completionHandler:)` alone can't:
+/// whether the HTTP upgrade handshake actually succeeded, and if not, the real HTTP
+/// status/network error behind the failure. Delegate callbacks arrive on the
+/// session's own background queue, not the main actor - callers must hop back
+/// themselves.
+// Delegate callbacks fire on a background queue, i.e. off the main actor - but the
+// only state here is two immutable closures assigned once at init, so this is safe
+// despite the class not being provably Sendable to the compiler.
+private final class WebSocketSessionDelegate: NSObject, URLSessionWebSocketDelegate, @unchecked Sendable {
+    private let onOpen: (String?) -> Void
+    private let onComplete: (Error?, URLResponse?) -> Void
+
+    init(onOpen: @escaping (String?) -> Void, onComplete: @escaping (Error?, URLResponse?) -> Void) {
+        self.onOpen = onOpen
+        self.onComplete = onComplete
+    }
+
+    func urlSession(
+        _ session: URLSession,
+        webSocketTask: URLSessionWebSocketTask,
+        didOpenWithProtocol protocol: String?
+    ) {
+        onOpen(`protocol`)
+    }
+
+    func urlSession(_ session: URLSession, task: URLSessionTask, didCompleteWithError error: Error?) {
+        onComplete(error, task.response)
     }
 }
