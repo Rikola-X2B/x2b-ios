@@ -10,6 +10,9 @@ import SwiftUI
 @main
 struct x2bApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    // Forces PhoneWatchConnector's singleton to initialize (and activate
+    // WatchConnectivity) at launch, not lazily on first use.
+    private let watchConnector = PhoneWatchConnector.shared
 
     var body: some Scene {
         WindowGroup {

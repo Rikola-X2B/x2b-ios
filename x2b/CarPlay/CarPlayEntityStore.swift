@@ -17,18 +17,23 @@ import Combine
 /// needs it anymore.
 @MainActor
 final class CarPlayEntityStore: ObservableObject {
-    static let shared = CarPlayEntityStore()
+    static let shared = CarPlayEntityStore(slotsKeyPath: \.carPlaySlots)
+    /// Same mechanism, but reading the Watch's independent 8-slot layout instead of
+    /// CarPlay's - used by `PhoneWatchConnector` to relay to a paired Apple Watch.
+    static let sharedForWatch = CarPlayEntityStore(slotsKeyPath: \.watchSlots)
 
     @Published private(set) var isConnected = false
     @Published private(set) var controls: [Int: X2BControl] = [:]
 
+    private let slotsKeyPath: KeyPath<Connection, [CarPlaySlotAssignment]>
     private let socket = X2BWebSocketClient()
     private var socketSubscription: AnyCancellable?
     private var connectionSubscription: AnyCancellable?
     private var connectedUrl: String?
     private var refCount = 0
 
-    private init() {
+    private init(slotsKeyPath: KeyPath<Connection, [CarPlaySlotAssignment]>) {
+        self.slotsKeyPath = slotsKeyPath
         // `objectWillChange` fires before the socket's own properties are actually
         // updated, so read them back on the next runloop turn rather than inline.
         socketSubscription = socket.objectWillChange
@@ -67,7 +72,7 @@ final class CarPlayEntityStore: ObservableObject {
     }
 
     var slots: [CarPlaySlotAssignment] {
-        ConnectionStore.shared.displayedConnection?.carPlaySlots ?? CarPlaySlotAssignment.defaultSlots
+        ConnectionStore.shared.displayedConnection?[keyPath: slotsKeyPath] ?? CarPlaySlotAssignment.defaultSlots
     }
 
     func control(for slot: CarPlaySlotAssignment) -> X2BControl? {

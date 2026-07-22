@@ -40,6 +40,14 @@
 		76EFF4641E7D6D98C2FDEBA7 /* X2BWebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7105950BAB6A71CC9228254A /* X2BWebSocketClient.swift */; };
 		D1AA9670AC645A4EEEC8352A /* CarPlaySlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3780DE09634D6A8E2D0FA9 /* CarPlaySlot.swift */; };
 		771E3A1C875A21B212F0D1D8 /* CarPlaySlotsAssignmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0764CCBA76A2E6564DF15941 /* CarPlaySlotsAssignmentView.swift */; };
+		4AB7809774805FE2B6A56312 /* PhoneWatchConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDE636DD9A120346F770BA4D /* PhoneWatchConnector.swift */; };
+		E33307FDA68114E1E5ECF602 /* WatchSlotState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3AB166078FFA70DDE1DF9 /* WatchSlotState.swift */; };
+		D26A5E0156770AE1946B3871 /* WatchSlotsAssignmentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FB839D44C0A4E3F41165DB1 /* WatchSlotsAssignmentView.swift */; };
+		2760FECA9BB3AF06B5544168 /* WatchSlotState.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDA3AB166078FFA70DDE1DF9 /* WatchSlotState.swift */; };
+		2BF991C2044C4AE70E189F8A /* X2BWatchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 61AF223973F4D19E660FEC64 /* X2BWatchApp.swift */; };
+		4652E35A478363BB208880C0 /* WatchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E114AEA0078D89830E8ECE9 /* WatchContentView.swift */; };
+		300B805A64B8A2BCDFF407BA /* WatchConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BA9492B0F7B34BCC70EB24 /* WatchConnector.swift */; };
+		25ED7395C1F6A0E4B5621DA6 /* X2B Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = E17446EC37C94AD9605DA7DA /* X2B Watch App.app */; settings = {ATTRIBUTES = (RemoveHeaderOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +65,28 @@
 			remoteGlobalIDString = E1FBDBE62D1DA50F006A5214;
 			remoteInfo = x2b;
 		};
+		BA2005BD2C710A740B3CF1E8 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E1FBDBDF2D1DA50F006A5214 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 83BE656FEBBEDF53F98C1151;
+			remoteInfo = "X2B Watch App";
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		7E2229FCFB9E4096D4ED718C /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				25ED7395C1F6A0E4B5621DA6 /* X2B Watch App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		E1FBDBE72D1DA50F006A5214 /* x2b.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = x2b.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -98,6 +127,14 @@
 		7105950BAB6A71CC9228254A /* X2BWebSocketClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BWebSocketClient.swift; sourceTree = "<group>"; };
 		4E3780DE09634D6A8E2D0FA9 /* CarPlaySlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySlot.swift; sourceTree = "<group>"; };
 		0764CCBA76A2E6564DF15941 /* CarPlaySlotsAssignmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CarPlaySlotsAssignmentView.swift; sourceTree = "<group>"; };
+		BDE636DD9A120346F770BA4D /* PhoneWatchConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneWatchConnector.swift; sourceTree = "<group>"; };
+		CDA3AB166078FFA70DDE1DF9 /* WatchSlotState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSlotState.swift; sourceTree = "<group>"; };
+		0FB839D44C0A4E3F41165DB1 /* WatchSlotsAssignmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSlotsAssignmentView.swift; sourceTree = "<group>"; };
+		E17446EC37C94AD9605DA7DA /* X2B Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "X2B Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		61AF223973F4D19E660FEC64 /* X2BWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BWatchApp.swift; sourceTree = "<group>"; };
+		8E114AEA0078D89830E8ECE9 /* WatchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchContentView.swift; sourceTree = "<group>"; };
+		16BA9492B0F7B34BCC70EB24 /* WatchConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnector.swift; sourceTree = "<group>"; };
+		320EA4B7FAE4FC19D85A4A93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -122,6 +159,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		4C93DD36AF9C9FB46C79F038 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -129,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				E1FBDBE92D1DA50F006A5214 /* x2b */,
+				43B336D45D5E72E991D5D9D6 /* X2B Watch App */,
 				E1FBDBFA2D1DA512006A5214 /* x2bTests */,
 				E1FBDC042D1DA512006A5214 /* x2bUITests */,
 				E1FBDBE82D1DA50F006A5214 /* Products */,
@@ -141,8 +186,29 @@
 				E1FBDBE72D1DA50F006A5214 /* x2b.app */,
 				E1FBDBF72D1DA512006A5214 /* x2bTests.xctest */,
 				E1FBDC012D1DA512006A5214 /* x2bUITests.xctest */,
+				E17446EC37C94AD9605DA7DA /* X2B Watch App.app */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		43B336D45D5E72E991D5D9D6 /* X2B Watch App */ = {
+			isa = PBXGroup;
+			children = (
+				61AF223973F4D19E660FEC64 /* X2BWatchApp.swift */,
+				8E114AEA0078D89830E8ECE9 /* WatchContentView.swift */,
+				16BA9492B0F7B34BCC70EB24 /* WatchConnector.swift */,
+				320EA4B7FAE4FC19D85A4A93 /* Info.plist */,
+			);
+			path = "X2B Watch App";
+			sourceTree = "<group>";
+		};
+		3A41928281D7908528ABFBC5 /* Watch */ = {
+			isa = PBXGroup;
+			children = (
+				BDE636DD9A120346F770BA4D /* PhoneWatchConnector.swift */,
+				CDA3AB166078FFA70DDE1DF9 /* WatchSlotState.swift */,
+			);
+			path = Watch;
 			sourceTree = "<group>";
 		};
 		E1FBDBE92D1DA50F006A5214 /* x2b */ = {
@@ -156,6 +222,7 @@
 				785D6839D7E01C38A4CC5BDA /* Views */,
 				A88EA087678031B466CF43E1 /* Push */,
 				ACBCC6878EA61EF88A6EDD27 /* CarPlay */,
+				3A41928281D7908528ABFBC5 /* Watch */,
 				907524DF3587CFFFBFF17683 /* Support */,
 				C74EB409EE209E51E0BCE334 /* Info.plist */,
 				424DDAAD41028EE1C3E663A4 /* x2b.entitlements */,
@@ -215,6 +282,7 @@
 				E21DFE11A26DC8DA6F5DF68A /* ConnectionEditView.swift */,
 				E6B42CEEED3320871687BB91 /* ForcedUpdateView.swift */,
 				0764CCBA76A2E6564DF15941 /* CarPlaySlotsAssignmentView.swift */,
+				0FB839D44C0A4E3F41165DB1 /* WatchSlotsAssignmentView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -275,14 +343,33 @@
 				E1FBDBE32D1DA50F006A5214 /* Sources */,
 				E1FBDBE42D1DA50F006A5214 /* Frameworks */,
 				E1FBDBE52D1DA50F006A5214 /* Resources */,
+				7E2229FCFB9E4096D4ED718C /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				7A247BE49BD626815EEDD7C0 /* PBXTargetDependency */,
+			);
+			name = x2b;
+			productName = x2b;
+			productReference = E1FBDBE72D1DA50F006A5214 /* x2b.app */;
+			productType = "com.apple.product-type.application";
+		};
+		83BE656FEBBEDF53F98C1151 /* X2B Watch App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E9D35B8F4A5CD62CE8986F55 /* Build configuration list for PBXNativeTarget "X2B Watch App" */;
+			buildPhases = (
+				AA2DEB4223E194ACDAB104FB /* Sources */,
+				4C93DD36AF9C9FB46C79F038 /* Frameworks */,
+				E3B4D42CDBFA432B2F4C48C0 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
-			name = x2b;
-			productName = x2b;
-			productReference = E1FBDBE72D1DA50F006A5214 /* x2b.app */;
+			name = "X2B Watch App";
+			productName = "X2B Watch App";
+			productReference = E17446EC37C94AD9605DA7DA /* X2B Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
 		E1FBDBF62D1DA512006A5214 /* x2bTests */ = {
@@ -342,6 +429,9 @@
 						CreatedOnToolsVersion = 15.4;
 						TestTargetID = E1FBDBE62D1DA50F006A5214;
 					};
+					83BE656FEBBEDF53F98C1151 = {
+						CreatedOnToolsVersion = 15.4;
+					};
 				};
 			};
 			buildConfigurationList = E1FBDBE22D1DA50F006A5214 /* Build configuration list for PBXProject "x2b" */;
@@ -360,6 +450,7 @@
 				E1FBDBE62D1DA50F006A5214 /* x2b */,
 				E1FBDBF62D1DA512006A5214 /* x2bTests */,
 				E1FBDC002D1DA512006A5214 /* x2bUITests */,
+				83BE656FEBBEDF53F98C1151 /* X2B Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -382,6 +473,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E1FBDBFF2D1DA512006A5214 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		E3B4D42CDBFA432B2F4C48C0 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -423,6 +521,20 @@
 				76EFF4641E7D6D98C2FDEBA7 /* X2BWebSocketClient.swift in Sources */,
 				D1AA9670AC645A4EEEC8352A /* CarPlaySlot.swift in Sources */,
 				771E3A1C875A21B212F0D1D8 /* CarPlaySlotsAssignmentView.swift in Sources */,
+				4AB7809774805FE2B6A56312 /* PhoneWatchConnector.swift in Sources */,
+				E33307FDA68114E1E5ECF602 /* WatchSlotState.swift in Sources */,
+				D26A5E0156770AE1946B3871 /* WatchSlotsAssignmentView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AA2DEB4223E194ACDAB104FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				2BF991C2044C4AE70E189F8A /* X2BWatchApp.swift in Sources */,
+				4652E35A478363BB208880C0 /* WatchContentView.swift in Sources */,
+				300B805A64B8A2BCDFF407BA /* WatchConnector.swift in Sources */,
+				2760FECA9BB3AF06B5544168 /* WatchSlotState.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -455,6 +567,11 @@
 			isa = PBXTargetDependency;
 			target = E1FBDBE62D1DA50F006A5214 /* x2b */;
 			targetProxy = E1FBDC022D1DA512006A5214 /* PBXContainerItemProxy */;
+		};
+		7A247BE49BD626815EEDD7C0 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 83BE656FEBBEDF53F98C1151 /* X2B Watch App */;
+			targetProxy = BA2005BD2C710A740B3CF1E8 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -704,6 +821,45 @@
 			};
 			name = Release;
 		};
+		21F50AF9ECCA5E5BEEEE3DE6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 62LZW2UPSK;
+				INFOPLIST_FILE = "X2B Watch App/Info.plist";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = energy.inno.x2b.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Debug;
+		};
+		704B81DAC82B913CC6C2D899 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 62LZW2UPSK;
+				INFOPLIST_FILE = "X2B Watch App/Info.plist";
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = energy.inno.x2b.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 10.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -739,6 +895,15 @@
 			buildConfigurations = (
 				E1FBDC122D1DA512006A5214 /* Debug */,
 				E1FBDC132D1DA512006A5214 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		E9D35B8F4A5CD62CE8986F55 /* Build configuration list for PBXNativeTarget "X2B Watch App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				21F50AF9ECCA5E5BEEEE3DE6 /* Debug */,
+				704B81DAC82B913CC6C2D899 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

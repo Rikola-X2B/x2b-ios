@@ -15,6 +15,10 @@ struct Connection: Identifiable, Codable, Equatable {
     var systemId: String
     var pushEnabled: Bool
     var carPlaySlots: [CarPlaySlotAssignment]
+    /// Independent from `carPlaySlots` - the user picks a separate 8-control layout
+    /// for the Watch, since a car dashboard and a wrist screen call for different
+    /// controls (and each is set up per device anyway, not synced to the box).
+    var watchSlots: [CarPlaySlotAssignment]
 
     init(
         id: UUID = UUID(),
@@ -24,7 +28,8 @@ struct Connection: Identifiable, Codable, Equatable {
         internalIp: String = "",
         systemId: String = "",
         pushEnabled: Bool = true,
-        carPlaySlots: [CarPlaySlotAssignment] = CarPlaySlotAssignment.defaultSlots
+        carPlaySlots: [CarPlaySlotAssignment] = CarPlaySlotAssignment.defaultSlots,
+        watchSlots: [CarPlaySlotAssignment] = CarPlaySlotAssignment.defaultSlots
     ) {
         self.id = id
         self.name = name
@@ -34,14 +39,15 @@ struct Connection: Identifiable, Codable, Equatable {
         self.systemId = systemId
         self.pushEnabled = pushEnabled
         self.carPlaySlots = carPlaySlots
+        self.watchSlots = watchSlots
     }
 
     private enum CodingKeys: String, CodingKey {
-        case id, name, url, status, internalIp, systemId, pushEnabled, carPlaySlots
+        case id, name, url, status, internalIp, systemId, pushEnabled, carPlaySlots, watchSlots
     }
 
-    // Manual Codable so connections persisted before carPlaySlots existed still decode
-    // (missing key -> default slots) instead of failing to load entirely.
+    // Manual Codable so connections persisted before carPlaySlots/watchSlots existed
+    // still decode (missing key -> default slots) instead of failing to load entirely.
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
@@ -52,6 +58,8 @@ struct Connection: Identifiable, Codable, Equatable {
         systemId = try container.decode(String.self, forKey: .systemId)
         pushEnabled = try container.decode(Bool.self, forKey: .pushEnabled)
         carPlaySlots = try container.decodeIfPresent([CarPlaySlotAssignment].self, forKey: .carPlaySlots)
+            ?? CarPlaySlotAssignment.defaultSlots
+        watchSlots = try container.decodeIfPresent([CarPlaySlotAssignment].self, forKey: .watchSlots)
             ?? CarPlaySlotAssignment.defaultSlots
     }
 
@@ -65,5 +73,6 @@ struct Connection: Identifiable, Codable, Equatable {
         try container.encode(systemId, forKey: .systemId)
         try container.encode(pushEnabled, forKey: .pushEnabled)
         try container.encode(carPlaySlots, forKey: .carPlaySlots)
+        try container.encode(watchSlots, forKey: .watchSlots)
     }
 }
