@@ -9,8 +9,10 @@ import CoreLocation
 
 /// Lets the user pick where a box "lives" - tap the map or use the current location -
 /// so `LocationSwitchManager` can later switch to it automatically via geofencing.
+/// Pushed from `BoxSettingsView`, which owns the connection to the box.
 struct ConnectionLocationView: View {
     let connection: Connection
+    @ObservedObject var client: X2BWebSocketClient
     var onSave: (Connection) -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -19,11 +21,11 @@ struct ConnectionLocationView: View {
     @State private var presenceControlId: Int?
     @State private var presenceControlName: String?
     @State private var sortedControls: [X2BControl] = []
-    @StateObject private var client = X2BWebSocketClient()
     @StateObject private var locator = OneShotLocator()
 
-    init(connection: Connection, onSave: @escaping (Connection) -> Void) {
+    init(connection: Connection, client: X2BWebSocketClient, onSave: @escaping (Connection) -> Void) {
         self.connection = connection
+        self.client = client
         self.onSave = onSave
         let initial = connection.coordinate
         _coordinate = State(initialValue: initial)
@@ -38,78 +40,70 @@ struct ConnectionLocationView: View {
     }
 
     var body: some View {
-        NavigationStack {
-            VStack(spacing: 0) {
-                MapReader { proxy in
-                    Map(position: $cameraPosition) {
-                        if let coordinate {
-                            Marker(connection.name, coordinate: coordinate)
-                        }
-                    }
-                    .onTapGesture { point in
-                        if let tapped = proxy.convert(point, from: .local) {
-                            coordinate = tapped
-                        }
+        VStack(spacing: 0) {
+            MapReader { proxy in
+                Map(position: $cameraPosition) {
+                    if let coordinate {
+                        Marker(connection.name, coordinate: coordinate)
                     }
                 }
-                .frame(height: 280)
-
-                Form {
-                    Section {
-                        Button {
-                            locator.requestLocation { location in
-                                coordinate = location.coordinate
-                                cameraPosition = .region(MKCoordinateRegion(
-                                    center: location.coordinate,
-                                    span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
-                                ))
-                            }
-                        } label: {
-                            Label("Aktuellen Standort verwenden", systemImage: "location.fill")
-                        }
-
-                        if coordinate != nil {
-                            Button("Standort entfernen", role: .destructive) {
-                                coordinate = nil
-                            }
-                        }
-                    }
-
-                    Section {
-                        Picker("Anwesenheits-Control", selection: presenceControlBinding) {
-                            Text(presencePlaceholder).tag(Int?.none)
-                            ForEach(sortedControls) { control in
-                                Text(control.name).tag(Int?.some(control.id))
-                            }
-                        }
-                    } footer: {
-                        Text("Wird auf 1 gesetzt, sobald du in der Nähe dieser Box bist, und auf 0, wenn du sie verlässt oder eine andere Box-Region betrittst.")
+                .onTapGesture { point in
+                    if let tapped = proxy.convert(point, from: .local) {
+                        coordinate = tapped
                     }
                 }
             }
-            .navigationTitle("Standort – \(connection.name)")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") { dismiss() }
-                }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Speichern") {
-                        var updated = connection
-                        updated.latitude = coordinate?.latitude
-                        updated.longitude = coordinate?.longitude
-                        updated.presenceControlId = presenceControlId
-                        updated.presenceControlName = presenceControlName
-                        onSave(updated)
-                        dismiss()
+            .frame(height: 280)
+
+            Form {
+                Section {
+                    Button {
+                        locator.requestLocation { location in
+                            coordinate = location.coordinate
+                            cameraPosition = .region(MKCoordinateRegion(
+                                center: location.coordinate,
+                                span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
+                            ))
+                        }
+                    } label: {
+                        Label("Aktuellen Standort verwenden", systemImage: "location.fill")
                     }
+
+                    if coordinate != nil {
+                        Button("Standort entfernen", role: .destructive) {
+                            coordinate = nil
+                        }
+                    }
+                }
+
+                Section {
+                    Picker("Anwesenheits-Control", selection: presenceControlBinding) {
+                        Text(presencePlaceholder).tag(Int?.none)
+                        ForEach(sortedControls) { control in
+                            Text(control.name).tag(Int?.some(control.id))
+                        }
+                    }
+                } footer: {
+                    Text("Wird auf 1 gesetzt, sobald du in der Nähe dieser Box bist, und auf 0, wenn du sie verlässt oder eine andere Box-Region betrittst.")
                 }
             }
         }
-        // Only need the static list of names to pick from here, not live values - see
-        // the equivalent note in CarPlaySlotsAssignmentView.
-        .onAppear { client.connect(baseUrl: connection.url, trackLiveUpdates: false) }
-        .onDisappear { client.disconnect() }
+        .navigationTitle("Standort – \(connection.name)")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .confirmationAction) {
+                Button("Speichern") {
+                    var updated = connection
+                    updated.latitude = coordinate?.latitude
+                    updated.longitude = coordinate?.longitude
+                    updated.presenceControlId = presenceControlId
+                    updated.presenceControlName = presenceControlName
+                    onSave(updated)
+                    dismiss()
+                }
+            }
+        }
+        .onAppear { sortedControls = client.controls.values.sorted { $0.name < $1.name } }
         .onChange(of: client.controls) { _, newControls in
             sortedControls = newControls.values.sorted { $0.name < $1.name }
         }

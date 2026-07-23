@@ -17,9 +17,7 @@ struct SettingsView: View {
     @State private var selectedIDs: Set<UUID> = []
     @State private var editingTarget: EditTarget?
     @State private var showCarPlayPreview = false
-    @State private var assigningCarPlayConnection: Connection?
-    @State private var assigningWatchConnection: Connection?
-    @State private var settingLocationConnection: Connection?
+    @State private var configuringConnection: Connection?
 
     private enum EditTarget: Identifiable {
         case add
@@ -71,14 +69,8 @@ struct SettingsView: View {
         .fullScreenCover(isPresented: $showCarPlayPreview) {
             CarPlayPreviewView()
         }
-        .sheet(item: $assigningCarPlayConnection) { connection in
-            CarPlaySlotsAssignmentView(connection: connection) { connectionStore.update($0) }
-        }
-        .sheet(item: $assigningWatchConnection) { connection in
-            WatchSlotsAssignmentView(connection: connection) { connectionStore.update($0) }
-        }
-        .sheet(item: $settingLocationConnection) { connection in
-            ConnectionLocationView(connection: connection) { connectionStore.update($0) }
+        .sheet(item: $configuringConnection) { connection in
+            BoxSettingsView(connection: connection) { connectionStore.update($0) }
         }
     }
 
@@ -147,9 +139,7 @@ struct SettingsView: View {
                         isSelected: selectedIDs.contains(connection.id),
                         onTap: { toggleSelection(connection.id) },
                         onPreview: { onPreview(connection.url) },
-                        onAssignCarPlay: { assigningCarPlayConnection = connection },
-                        onAssignWatch: { assigningWatchConnection = connection },
-                        onSetLocation: { settingLocationConnection = connection }
+                        onConfigure: { configuringConnection = connection }
                     )
                 }
             }
@@ -235,9 +225,7 @@ private struct ConnectionRow: View {
     let isSelected: Bool
     var onTap: () -> Void
     var onPreview: () -> Void
-    var onAssignCarPlay: () -> Void
-    var onAssignWatch: () -> Void
-    var onSetLocation: () -> Void
+    var onConfigure: () -> Void
 
     var body: some View {
         HStack(spacing: 8) {
@@ -280,24 +268,8 @@ private struct ConnectionRow: View {
             }
             .buttonStyle(.plain)
 
-            Button(action: onAssignCarPlay) {
-                Image(systemName: "car.fill")
-                    .foregroundColor(.white)
-                    .frame(width: 36, height: 36)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-
-            Button(action: onAssignWatch) {
-                Image(systemName: "applewatch")
-                    .foregroundColor(.white)
-                    .frame(width: 36, height: 36)
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
-
-            Button(action: onSetLocation) {
-                Image(systemName: "mappin.and.ellipse")
+            Button(action: onConfigure) {
+                Image(systemName: "gearshape.fill")
                     .foregroundColor(.white)
                     .frame(width: 36, height: 36)
                     .contentShape(Rectangle())

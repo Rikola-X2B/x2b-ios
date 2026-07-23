@@ -50,6 +50,7 @@
 		25ED7395C1F6A0E4B5621DA6 /* X2B Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = E17446EC37C94AD9605DA7DA /* X2B Watch App.app */; settings = {ATTRIBUTES = (RemoveHeaderOnCopy, ); }; };
 		324B854A841163AFCDB59C63 /* LocationSwitchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B91DFED69656A44830FCB5A /* LocationSwitchManager.swift */; };
 		5AD2320E593EAF5A0A31C506 /* ConnectionLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7338C04F3153E9DC0849F3 /* ConnectionLocationView.swift */; };
+		9ED6F2263197E32184F93544 /* BoxSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63C199CCB64D3744A72F214 /* BoxSettingsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -139,6 +140,7 @@
 		320EA4B7FAE4FC19D85A4A93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2B91DFED69656A44830FCB5A /* LocationSwitchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSwitchManager.swift; sourceTree = "<group>"; };
 		CD7338C04F3153E9DC0849F3 /* ConnectionLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionLocationView.swift; sourceTree = "<group>"; };
+		A63C199CCB64D3744A72F214 /* BoxSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxSettingsView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -297,6 +299,7 @@
 				0764CCBA76A2E6564DF15941 /* CarPlaySlotsAssignmentView.swift */,
 				0FB839D44C0A4E3F41165DB1 /* WatchSlotsAssignmentView.swift */,
 				CD7338C04F3153E9DC0849F3 /* ConnectionLocationView.swift */,
+				A63C199CCB64D3744A72F214 /* BoxSettingsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -540,6 +543,7 @@
 				D26A5E0156770AE1946B3871 /* WatchSlotsAssignmentView.swift in Sources */,
 				324B854A841163AFCDB59C63 /* LocationSwitchManager.swift in Sources */,
 				5AD2320E593EAF5A0A31C506 /* ConnectionLocationView.swift in Sources */,
+				9ED6F2263197E32184F93544 /* BoxSettingsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
