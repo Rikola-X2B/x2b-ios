@@ -24,6 +24,12 @@ struct Connection: Identifiable, Codable, Equatable {
     /// no location has been set yet, so this connection is never auto-switched to.
     var latitude: Double?
     var longitude: Double?
+    /// A boolean control that `LocationSwitchManager` sets to true on arriving in
+    /// this box's region, and back to false on leaving it (or entering another box's
+    /// region) - e.g. an "anwesend"/presence indicator. `controlName` is cached at
+    /// assignment time purely for display, same reasoning as `CarPlaySlotAssignment`.
+    var presenceControlId: Int?
+    var presenceControlName: String?
 
     var coordinate: CLLocationCoordinate2D? {
         guard let latitude, let longitude else { return nil }
@@ -41,7 +47,9 @@ struct Connection: Identifiable, Codable, Equatable {
         carPlaySlots: [CarPlaySlotAssignment] = CarPlaySlotAssignment.defaultSlots,
         watchSlots: [CarPlaySlotAssignment] = CarPlaySlotAssignment.defaultSlots,
         latitude: Double? = nil,
-        longitude: Double? = nil
+        longitude: Double? = nil,
+        presenceControlId: Int? = nil,
+        presenceControlName: String? = nil
     ) {
         self.id = id
         self.name = name
@@ -54,15 +62,17 @@ struct Connection: Identifiable, Codable, Equatable {
         self.watchSlots = watchSlots
         self.latitude = latitude
         self.longitude = longitude
+        self.presenceControlId = presenceControlId
+        self.presenceControlName = presenceControlName
     }
 
     private enum CodingKeys: String, CodingKey {
         case id, name, url, status, internalIp, systemId, pushEnabled, carPlaySlots, watchSlots
-        case latitude, longitude
+        case latitude, longitude, presenceControlId, presenceControlName
     }
 
-    // Manual Codable so connections persisted before carPlaySlots/watchSlots/location
-    // existed still decode (missing key -> default/nil) instead of failing entirely.
+    // Manual Codable so connections persisted before carPlaySlots/watchSlots/location/
+    // presence existed still decode (missing key -> default/nil) instead of failing.
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
@@ -78,6 +88,8 @@ struct Connection: Identifiable, Codable, Equatable {
             ?? CarPlaySlotAssignment.defaultSlots
         latitude = try container.decodeIfPresent(Double.self, forKey: .latitude)
         longitude = try container.decodeIfPresent(Double.self, forKey: .longitude)
+        presenceControlId = try container.decodeIfPresent(Int.self, forKey: .presenceControlId)
+        presenceControlName = try container.decodeIfPresent(String.self, forKey: .presenceControlName)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -93,5 +105,7 @@ struct Connection: Identifiable, Codable, Equatable {
         try container.encode(watchSlots, forKey: .watchSlots)
         try container.encodeIfPresent(latitude, forKey: .latitude)
         try container.encodeIfPresent(longitude, forKey: .longitude)
+        try container.encodeIfPresent(presenceControlId, forKey: .presenceControlId)
+        try container.encodeIfPresent(presenceControlName, forKey: .presenceControlName)
     }
 }

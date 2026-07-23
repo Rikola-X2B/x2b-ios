@@ -16,6 +16,10 @@ struct ConnectionLocationView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var coordinate: CLLocationCoordinate2D?
     @State private var cameraPosition: MapCameraPosition
+    @State private var presenceControlId: Int?
+    @State private var presenceControlName: String?
+    @State private var sortedControls: [X2BControl] = []
+    @StateObject private var client = X2BWebSocketClient()
     @StateObject private var locator = OneShotLocator()
 
     init(connection: Connection, onSave: @escaping (Connection) -> Void) {
@@ -23,6 +27,8 @@ struct ConnectionLocationView: View {
         self.onSave = onSave
         let initial = connection.coordinate
         _coordinate = State(initialValue: initial)
+        _presenceControlId = State(initialValue: connection.presenceControlId)
+        _presenceControlName = State(initialValue: connection.presenceControlName)
         _cameraPosition = State(initialValue: .region(
             MKCoordinateRegion(
                 center: initial ?? CLLocationCoordinate2D(latitude: 47.3769, longitude: 8.5417),
@@ -46,29 +52,40 @@ struct ConnectionLocationView: View {
                         }
                     }
                 }
+                .frame(height: 280)
 
-                VStack(spacing: 8) {
-                    Button {
-                        locator.requestLocation { location in
-                            coordinate = location.coordinate
-                            cameraPosition = .region(MKCoordinateRegion(
-                                center: location.coordinate,
-                                span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
-                            ))
+                Form {
+                    Section {
+                        Button {
+                            locator.requestLocation { location in
+                                coordinate = location.coordinate
+                                cameraPosition = .region(MKCoordinateRegion(
+                                    center: location.coordinate,
+                                    span: MKCoordinateSpan(latitudeDelta: 0.02, longitudeDelta: 0.02)
+                                ))
+                            }
+                        } label: {
+                            Label("Aktuellen Standort verwenden", systemImage: "location.fill")
                         }
-                    } label: {
-                        Label("Aktuellen Standort verwenden", systemImage: "location.fill")
-                            .frame(maxWidth: .infinity)
+
+                        if coordinate != nil {
+                            Button("Standort entfernen", role: .destructive) {
+                                coordinate = nil
+                            }
+                        }
                     }
-                    .buttonStyle(.borderedProminent)
 
-                    if coordinate != nil {
-                        Button("Standort entfernen", role: .destructive) {
-                            coordinate = nil
+                    Section {
+                        Picker("Anwesenheits-Control", selection: presenceControlBinding) {
+                            Text(presencePlaceholder).tag(Int?.none)
+                            ForEach(sortedControls) { control in
+                                Text(control.name).tag(Int?.some(control.id))
+                            }
                         }
+                    } footer: {
+                        Text("Wird auf 1 gesetzt, sobald du in der Nähe dieser Box bist, und auf 0, wenn du sie verlässt oder eine andere Box-Region betrittst.")
                     }
                 }
-                .padding()
             }
             .navigationTitle("Standort – \(connection.name)")
             .navigationBarTitleDisplayMode(.inline)
@@ -81,12 +98,38 @@ struct ConnectionLocationView: View {
                         var updated = connection
                         updated.latitude = coordinate?.latitude
                         updated.longitude = coordinate?.longitude
+                        updated.presenceControlId = presenceControlId
+                        updated.presenceControlName = presenceControlName
                         onSave(updated)
                         dismiss()
                     }
                 }
             }
         }
+        // Only need the static list of names to pick from here, not live values - see
+        // the equivalent note in CarPlaySlotsAssignmentView.
+        .onAppear { client.connect(baseUrl: connection.url, trackLiveUpdates: false) }
+        .onDisappear { client.disconnect() }
+        .onChange(of: client.controls) { _, newControls in
+            sortedControls = newControls.values.sorted { $0.name < $1.name }
+        }
+    }
+
+    private var presencePlaceholder: String {
+        if let presenceControlId, client.controls[presenceControlId] == nil, let cachedName = presenceControlName {
+            return "\(cachedName) (nicht verbunden)"
+        }
+        return "Nicht verknüpft"
+    }
+
+    private var presenceControlBinding: Binding<Int?> {
+        Binding(
+            get: { presenceControlId },
+            set: { newId in
+                presenceControlId = newId
+                presenceControlName = newId.flatMap { client.controls[$0]?.name }
+            }
+        )
     }
 }
 

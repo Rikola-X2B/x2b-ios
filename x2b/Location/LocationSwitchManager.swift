@@ -9,7 +9,9 @@ import CoreLocation
 /// Automatically switches the active connection to whichever box's saved location
 /// the phone is currently inside, using CoreLocation region monitoring (geofencing) -
 /// event-driven and low-power, and (with "Always" authorization) works even while
-/// the app isn't running, unlike continuous GPS tracking.
+/// the app isn't running, unlike continuous GPS tracking. Also sets each box's
+/// optional presence control to true on entering its region and back to false on
+/// leaving it (or entering another box's region).
 @MainActor
 final class LocationSwitchManager: NSObject, ObservableObject {
     static let shared = LocationSwitchManager()
@@ -68,8 +70,25 @@ final class LocationSwitchManager: NSObject, ObservableObject {
             guard let coordinate = connection.coordinate else { continue }
             let region = CLCircularRegion(center: coordinate, radius: Self.regionRadius, identifier: connection.id.uuidString)
             region.notifyOnEntry = true
-            region.notifyOnExit = false
+            // Also needed now: leaving a box's own region (not just entering another
+            // one) has to clear its presence control back to false on its own.
+            region.notifyOnExit = true
             manager.startMonitoring(for: region)
+        }
+    }
+
+    /// Opens a short-lived connection just to send one `SetControlValue` and tears
+    /// it back down - a presence control update is a one-off side effect of a region
+    /// crossing, not something that needs a socket kept open afterwards.
+    private func setPresence(for connection: Connection, isPresent: Bool) {
+        guard let controlId = connection.presenceControlId else { return }
+        let socket = X2BWebSocketClient()
+        socket.connect(baseUrl: connection.url, trackLiveUpdates: false)
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 2_000_000_000)
+            socket.setControlValue(id: controlId, value: .bool(isPresent))
+            try? await Task.sleep(nanoseconds: 500_000_000)
+            socket.disconnect()
         }
     }
 }
@@ -81,6 +100,16 @@ extension LocationSwitchManager: CLLocationManagerDelegate {
                 return
             }
             ConnectionStore.shared.setActive(url: connection.url)
+            self.setPresence(for: connection, isPresent: true)
+        }
+    }
+
+    nonisolated func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
+        Task { @MainActor in
+            guard let connection = ConnectionStore.shared.connections.first(where: { $0.id.uuidString == region.identifier }) else {
+                return
+            }
+            self.setPresence(for: connection, isPresent: false)
         }
     }
 
