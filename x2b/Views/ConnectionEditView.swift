@@ -6,7 +6,9 @@
 import SwiftUI
 
 /// Add/edit form for a connection, mirroring `dialog_connection.xml` used by
-/// `SettingsActivity.showConnectionDialog`.
+/// `SettingsActivity.showConnectionDialog`. No `NavigationStack` of its own - callers
+/// wrap it themselves, since it's used both as a standalone sheet (adding a new
+/// connection) and pushed inside `BoxSettingsView`'s own stack ("Allgemein").
 struct ConnectionEditView: View {
     let existing: Connection?
     var onSave: (Connection) -> Void
@@ -21,51 +23,49 @@ struct ConnectionEditView: View {
     @State private var validationMessage: String?
 
     var body: some View {
-        NavigationStack {
-            Form {
-                Section {
-                    TextField("Name der Verbindung", text: $name)
-                    TextField(
-                        "URL oder IP der X2B-Box (z. B. https://demo.x2.energy oder 192.168.1.50)",
-                        text: $url
-                    )
-                    .textInputAutocapitalization(.never)
-                    .keyboardType(.URL)
-                    .disableAutocorrection(true)
-                }
+        Form {
+            Section {
+                TextField("Name der Verbindung", text: $name)
+                TextField(
+                    "URL oder IP der X2B-Box (z. B. https://demo.x2.energy oder 192.168.1.50)",
+                    text: $url
+                )
+                .textInputAutocapitalization(.never)
+                .keyboardType(.URL)
+                .disableAutocorrection(true)
+            }
 
-                // Read-only, auto-fetched from the box's appconfig.json when editing.
-                // Mirrors Android: shown live for information but never persisted.
-                if existing != nil {
-                    Section("Interne IP-Adresse (LAN)") {
-                        Text(fetchedInternalIp).foregroundStyle(.secondary)
-                    }
-                    Section("System-ID") {
-                        Text(fetchedSystemId).foregroundStyle(.secondary)
-                    }
+            // Read-only, auto-fetched from the box's appconfig.json when editing.
+            // Mirrors Android: shown live for information but never persisted.
+            if existing != nil {
+                Section("Interne IP-Adresse (LAN)") {
+                    Text(fetchedInternalIp).foregroundStyle(.secondary)
                 }
-
-                Section {
-                    Toggle("Push-Benachrichtigungen für diese Box aktivieren", isOn: $pushEnabled)
-                }
-
-                if let validationMessage {
-                    Section {
-                        Text(validationMessage)
-                            .foregroundColor(.red)
-                            .font(.footnote)
-                    }
+                Section("System-ID") {
+                    Text(fetchedSystemId).foregroundStyle(.secondary)
                 }
             }
-            .navigationTitle(existing == nil ? "Verbindung hinzufügen" : "Verbindung bearbeiten")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Abbrechen") { dismiss() }
+
+            Section {
+                Toggle("Push-Benachrichtigungen für diese Box aktivieren", isOn: $pushEnabled)
+            }
+
+            if let validationMessage {
+                Section {
+                    Text(validationMessage)
+                        .foregroundColor(.red)
+                        .font(.footnote)
                 }
-                ToolbarItem(placement: .confirmationAction) {
-                    Button(existing == nil ? "Hinzufügen" : "Speichern", action: save)
-                }
+            }
+        }
+        .navigationTitle(existing == nil ? "Verbindung hinzufügen" : "Allgemein")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Abbrechen") { dismiss() }
+            }
+            ToolbarItem(placement: .confirmationAction) {
+                Button(existing == nil ? "Hinzufügen" : "Speichern", action: save)
             }
         }
         .onAppear(perform: populateFromExisting)

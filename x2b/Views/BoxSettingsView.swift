@@ -5,11 +5,11 @@
 
 import SwiftUI
 
-/// Entry point for all per-box, control-related settings (CarPlay, Watch, Geofence) -
-/// opened via the settings icon on a connection row. Owns a single connection to the
-/// box, established once here, so all three destinations already have the control
-/// list loaded by the time the user taps into them instead of each reconnecting on
-/// its own.
+/// Entry point for all per-box settings (Allgemein/CarPlay/Watch/Geofence) - opened
+/// via the settings icon on a connection row. Owns a single connection to the box,
+/// established once here, so the control-related destinations already have the
+/// control list loaded by the time the user taps into them instead of each
+/// reconnecting on its own.
 struct BoxSettingsView: View {
     var onSave: (Connection) -> Void
 
@@ -37,6 +37,15 @@ struct BoxSettingsView: View {
                 }
 
                 Section {
+                    NavigationLink {
+                        ConnectionEditView(existing: connection) { updated in
+                            connection = updated
+                            onSave(updated)
+                        }
+                    } label: {
+                        Label("Allgemein", systemImage: "slider.horizontal.3")
+                    }
+
                     NavigationLink {
                         CarPlaySlotsAssignmentView(connection: connection, client: client) { updated in
                             connection = updated
@@ -73,10 +82,10 @@ struct BoxSettingsView: View {
                 }
             }
         }
-        // Only need the static list of names to pick from in any of the three
-        // destinations, not live values - registering for updates on every one of
-        // the box's controls would just mean it keeps re-sending values none of them
-        // display, for as long as this screen is open.
+        // Only need the static list of names to pick from in any of the
+        // control-related destinations, not live values - registering for updates on
+        // every one of the box's controls would just mean it keeps re-sending values
+        // none of them display, for as long as this screen is open.
         .onAppear { client.connect(baseUrl: connection.url, trackLiveUpdates: false) }
         .onDisappear { client.disconnect() }
     }

@@ -59,11 +59,13 @@ struct SettingsView: View {
         }
         .background(Color(hex: "121212").ignoresSafeArea())
         .sheet(item: $editingTarget) { target in
-            switch target {
-            case .add:
-                ConnectionEditView(existing: nil) { connectionStore.add($0) }
-            case .edit(let connection):
-                ConnectionEditView(existing: connection) { connectionStore.update($0) }
+            NavigationStack {
+                switch target {
+                case .add:
+                    ConnectionEditView(existing: nil) { connectionStore.add($0) }
+                case .edit(let connection):
+                    ConnectionEditView(existing: connection) { connectionStore.update($0) }
+                }
             }
         }
         .fullScreenCover(isPresented: $showCarPlayPreview) {
