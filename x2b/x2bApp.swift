@@ -13,6 +13,9 @@ struct x2bApp: App {
     // Forces PhoneWatchConnector's singleton to initialize (and activate
     // WatchConnectivity) at launch, not lazily on first use.
     private let watchConnector = PhoneWatchConnector.shared
+    // Same reasoning: if location-based switching was already enabled, resume
+    // monitoring immediately on launch rather than waiting for Settings to be opened.
+    private let locationSwitchManager = LocationSwitchManager.shared
 
     var body: some Scene {
         WindowGroup {

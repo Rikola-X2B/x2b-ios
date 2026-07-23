@@ -81,6 +81,13 @@
 	     connections instead of prompting the user for permission. -->
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>X2B verbindet sich mit deiner X2B-Box im lokalen Netzwerk, um die Visualisierung anzuzeigen.</string>
+	<!-- For the optional GPS-based auto-switching feature (LocationSwitchManager) -
+	     both strings are required together for the two-step When-In-Use -> Always
+	     upgrade prompt flow. Only ever requested if the user turns the feature on. -->
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>X2B kann deinen Standort nutzen, um beim Erreichen einer gespeicherten Box automatisch zu dieser zu wechseln.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>X2B kann auch im Hintergrund automatisch zur richtigen Box wechseln, wenn du deren gespeicherten Standort erreichst.</string>
 	<!-- The app only ever uses standard HTTPS/TLS (via URLSession/WKWebView) for
 	     network requests - no custom or proprietary encryption - so it qualifies
 	     for the export-compliance exemption. Declaring this upfront skips the

@@ -19,6 +19,7 @@ struct SettingsView: View {
     @State private var showCarPlayPreview = false
     @State private var assigningCarPlayConnection: Connection?
     @State private var assigningWatchConnection: Connection?
+    @State private var settingLocationConnection: Connection?
 
     private enum EditTarget: Identifiable {
         case add
@@ -76,6 +77,9 @@ struct SettingsView: View {
         .sheet(item: $assigningWatchConnection) { connection in
             WatchSlotsAssignmentView(connection: connection) { connectionStore.update($0) }
         }
+        .sheet(item: $settingLocationConnection) { connection in
+            ConnectionLocationView(connection: connection) { connectionStore.update($0) }
+        }
     }
 
     private var header: some View {
@@ -90,6 +94,12 @@ struct SettingsView: View {
                 .font(.title2.bold())
                 .foregroundColor(.white)
             Spacer()
+            Button(action: toggleLocationSwitching) {
+                Image(systemName: connectionStore.locationSwitchingEnabled ? "location.fill" : "location.slash")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(connectionStore.locationSwitchingEnabled ? Color(hex: "4CAF50") : .white)
+                    .frame(width: 48, height: 48)
+            }
             Button(action: { showCarPlayPreview = true }) {
                 Image(systemName: "car.fill")
                     .font(.system(size: 18, weight: .semibold))
@@ -138,7 +148,8 @@ struct SettingsView: View {
                         onTap: { toggleSelection(connection.id) },
                         onPreview: { onPreview(connection.url) },
                         onAssignCarPlay: { assigningCarPlayConnection = connection },
-                        onAssignWatch: { assigningWatchConnection = connection }
+                        onAssignWatch: { assigningWatchConnection = connection },
+                        onSetLocation: { settingLocationConnection = connection }
                     )
                 }
             }
@@ -184,6 +195,10 @@ struct SettingsView: View {
         }
     }
 
+    private func toggleLocationSwitching() {
+        LocationSwitchManager.shared.setEnabled(!connectionStore.locationSwitchingEnabled)
+    }
+
     private func toggleSelection(_ id: UUID) {
         if selectedIDs.contains(id) {
             selectedIDs.remove(id)
@@ -222,6 +237,7 @@ private struct ConnectionRow: View {
     var onPreview: () -> Void
     var onAssignCarPlay: () -> Void
     var onAssignWatch: () -> Void
+    var onSetLocation: () -> Void
 
     var body: some View {
         HStack(spacing: 8) {
@@ -274,6 +290,14 @@ private struct ConnectionRow: View {
 
             Button(action: onAssignWatch) {
                 Image(systemName: "applewatch")
+                    .foregroundColor(.white)
+                    .frame(width: 36, height: 36)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+
+            Button(action: onSetLocation) {
+                Image(systemName: "mappin.and.ellipse")
                     .foregroundColor(.white)
                     .frame(width: 36, height: 36)
                     .contentShape(Rectangle())

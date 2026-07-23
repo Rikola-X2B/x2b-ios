@@ -3,6 +3,7 @@
 //  x2b
 //
 
+import CoreLocation
 import Foundation
 
 /// A single X2B box connection, mirroring `energy.inno.x2b.v2.Connection` on Android.
@@ -19,6 +20,15 @@ struct Connection: Identifiable, Codable, Equatable {
     /// for the Watch, since a car dashboard and a wrist screen call for different
     /// controls (and each is set up per device anyway, not synced to the box).
     var watchSlots: [CarPlaySlotAssignment]
+    /// Where this box "lives", for `LocationSwitchManager`'s geofencing - nil means
+    /// no location has been set yet, so this connection is never auto-switched to.
+    var latitude: Double?
+    var longitude: Double?
+
+    var coordinate: CLLocationCoordinate2D? {
+        guard let latitude, let longitude else { return nil }
+        return CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+    }
 
     init(
         id: UUID = UUID(),
@@ -29,7 +39,9 @@ struct Connection: Identifiable, Codable, Equatable {
         systemId: String = "",
         pushEnabled: Bool = true,
         carPlaySlots: [CarPlaySlotAssignment] = CarPlaySlotAssignment.defaultSlots,
-        watchSlots: [CarPlaySlotAssignment] = CarPlaySlotAssignment.defaultSlots
+        watchSlots: [CarPlaySlotAssignment] = CarPlaySlotAssignment.defaultSlots,
+        latitude: Double? = nil,
+        longitude: Double? = nil
     ) {
         self.id = id
         self.name = name
@@ -40,14 +52,17 @@ struct Connection: Identifiable, Codable, Equatable {
         self.pushEnabled = pushEnabled
         self.carPlaySlots = carPlaySlots
         self.watchSlots = watchSlots
+        self.latitude = latitude
+        self.longitude = longitude
     }
 
     private enum CodingKeys: String, CodingKey {
         case id, name, url, status, internalIp, systemId, pushEnabled, carPlaySlots, watchSlots
+        case latitude, longitude
     }
 
-    // Manual Codable so connections persisted before carPlaySlots/watchSlots existed
-    // still decode (missing key -> default slots) instead of failing to load entirely.
+    // Manual Codable so connections persisted before carPlaySlots/watchSlots/location
+    // existed still decode (missing key -> default/nil) instead of failing entirely.
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
@@ -61,6 +76,8 @@ struct Connection: Identifiable, Codable, Equatable {
             ?? CarPlaySlotAssignment.defaultSlots
         watchSlots = try container.decodeIfPresent([CarPlaySlotAssignment].self, forKey: .watchSlots)
             ?? CarPlaySlotAssignment.defaultSlots
+        latitude = try container.decodeIfPresent(Double.self, forKey: .latitude)
+        longitude = try container.decodeIfPresent(Double.self, forKey: .longitude)
     }
 
     func encode(to encoder: Encoder) throws {
@@ -74,5 +91,7 @@ struct Connection: Identifiable, Codable, Equatable {
         try container.encode(pushEnabled, forKey: .pushEnabled)
         try container.encode(carPlaySlots, forKey: .carPlaySlots)
         try container.encode(watchSlots, forKey: .watchSlots)
+        try container.encodeIfPresent(latitude, forKey: .latitude)
+        try container.encodeIfPresent(longitude, forKey: .longitude)
     }
 }

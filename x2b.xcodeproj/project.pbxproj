@@ -48,6 +48,8 @@
 		4652E35A478363BB208880C0 /* WatchContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E114AEA0078D89830E8ECE9 /* WatchContentView.swift */; };
 		300B805A64B8A2BCDFF407BA /* WatchConnector.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16BA9492B0F7B34BCC70EB24 /* WatchConnector.swift */; };
 		25ED7395C1F6A0E4B5621DA6 /* X2B Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = E17446EC37C94AD9605DA7DA /* X2B Watch App.app */; settings = {ATTRIBUTES = (RemoveHeaderOnCopy, ); }; };
+		324B854A841163AFCDB59C63 /* LocationSwitchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B91DFED69656A44830FCB5A /* LocationSwitchManager.swift */; };
+		5AD2320E593EAF5A0A31C506 /* ConnectionLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7338C04F3153E9DC0849F3 /* ConnectionLocationView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -135,6 +137,8 @@
 		8E114AEA0078D89830E8ECE9 /* WatchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchContentView.swift; sourceTree = "<group>"; };
 		16BA9492B0F7B34BCC70EB24 /* WatchConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnector.swift; sourceTree = "<group>"; };
 		320EA4B7FAE4FC19D85A4A93 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2B91DFED69656A44830FCB5A /* LocationSwitchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSwitchManager.swift; sourceTree = "<group>"; };
+		CD7338C04F3153E9DC0849F3 /* ConnectionLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionLocationView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,6 +215,14 @@
 			path = Watch;
 			sourceTree = "<group>";
 		};
+		035254D3FF4DE7EF52E9CC69 /* Location */ = {
+			isa = PBXGroup;
+			children = (
+				2B91DFED69656A44830FCB5A /* LocationSwitchManager.swift */,
+			);
+			path = Location;
+			sourceTree = "<group>";
+		};
 		E1FBDBE92D1DA50F006A5214 /* x2b */ = {
 			isa = PBXGroup;
 			children = (
@@ -223,6 +235,7 @@
 				A88EA087678031B466CF43E1 /* Push */,
 				ACBCC6878EA61EF88A6EDD27 /* CarPlay */,
 				3A41928281D7908528ABFBC5 /* Watch */,
+				035254D3FF4DE7EF52E9CC69 /* Location */,
 				907524DF3587CFFFBFF17683 /* Support */,
 				C74EB409EE209E51E0BCE334 /* Info.plist */,
 				424DDAAD41028EE1C3E663A4 /* x2b.entitlements */,
@@ -283,6 +296,7 @@
 				E6B42CEEED3320871687BB91 /* ForcedUpdateView.swift */,
 				0764CCBA76A2E6564DF15941 /* CarPlaySlotsAssignmentView.swift */,
 				0FB839D44C0A4E3F41165DB1 /* WatchSlotsAssignmentView.swift */,
+				CD7338C04F3153E9DC0849F3 /* ConnectionLocationView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -524,6 +538,8 @@
 				4AB7809774805FE2B6A56312 /* PhoneWatchConnector.swift in Sources */,
 				E33307FDA68114E1E5ECF602 /* WatchSlotState.swift in Sources */,
 				D26A5E0156770AE1946B3871 /* WatchSlotsAssignmentView.swift in Sources */,
+				324B854A841163AFCDB59C63 /* LocationSwitchManager.swift in Sources */,
+				5AD2320E593EAF5A0A31C506 /* ConnectionLocationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

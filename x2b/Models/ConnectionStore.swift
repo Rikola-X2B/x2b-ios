@@ -29,17 +29,26 @@ final class ConnectionStore: ObservableObject {
         didSet { defaults.set(edgeToEdge, forKey: Keys.edgeToEdge) }
     }
 
+    /// Whether `LocationSwitchManager` should auto-switch the active connection based
+    /// on which box's saved location the phone is currently inside. Toggled via the
+    /// GPS icon in Settings.
+    @Published var locationSwitchingEnabled: Bool {
+        didSet { defaults.set(locationSwitchingEnabled, forKey: Keys.locationSwitchingEnabled) }
+    }
+
     private let defaults: UserDefaults
 
     private enum Keys {
         static let connections = "connections"
         static let activeConnectionUrl = "active_connection_url"
         static let edgeToEdge = "visu_edge_to_edge"
+        static let locationSwitchingEnabled = "location_switching_enabled"
     }
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
         self.edgeToEdge = defaults.object(forKey: Keys.edgeToEdge) as? Bool ?? true
+        self.locationSwitchingEnabled = defaults.object(forKey: Keys.locationSwitchingEnabled) as? Bool ?? false
         self.activeConnectionUrl = defaults.string(forKey: Keys.activeConnectionUrl) ?? ""
         load()
     }
