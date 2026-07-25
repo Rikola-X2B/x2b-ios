@@ -18,6 +18,7 @@ final class PhoneWatchConnector: NSObject, ObservableObject {
 
     private let store = CarPlayEntityStore.sharedForWatch
     private var storeSubscription: AnyCancellable?
+    private var hasAcquiredStore = false
 
     private override init() {
         super.init()
@@ -25,6 +26,20 @@ final class PhoneWatchConnector: NSObject, ObservableObject {
         let session = WCSession.default
         session.delegate = self
         session.activate()
+        // Most users don't have a paired Apple Watch at all - acquiring the store
+        // here unconditionally would open a box connection (and register for live
+        // control updates) on every single app launch regardless, for a feature
+        // they'll never use. `isPaired`/`isWatchAppInstalled` only become meaningful
+        // once activation completes, so this is deferred to `acquireStoreIfNeeded()`.
+    }
+
+    /// Only connects to the box once a paired Watch with our app installed is
+    /// actually confirmed - checked after activation completes, and again if
+    /// pairing/install state changes later while the phone app keeps running.
+    private func acquireStoreIfNeeded() {
+        guard !hasAcquiredStore, WCSession.isSupported(),
+              WCSession.default.isPaired, WCSession.default.isWatchAppInstalled else { return }
+        hasAcquiredStore = true
 
         store.acquire()
         // The store changes for lots of reasons (box pushes an update, connection
@@ -36,10 +51,11 @@ final class PhoneWatchConnector: NSObject, ObservableObject {
             .sink { [weak self] _ in
                 DispatchQueue.main.async { self?.pushContext() }
             }
+        pushContext()
     }
 
     private func pushContext() {
-        guard WCSession.isSupported(), WCSession.default.activationState == .activated else { return }
+        guard hasAcquiredStore, WCSession.isSupported(), WCSession.default.activationState == .activated else { return }
 
         // Only assigned slots, same reasoning as the CarPlay grid - a watch face has
         // even less room to spare on empty "Nicht zugewiesen" placeholders. Falls
@@ -77,13 +93,19 @@ extension PhoneWatchConnector: WCSessionDelegate {
         activationDidCompleteWith activationState: WCSessionActivationState,
         error: Error?
     ) {
-        Task { @MainActor in self.pushContext() }
+        Task { @MainActor in self.acquireStoreIfNeeded() }
     }
 
     nonisolated func sessionDidBecomeInactive(_ session: WCSession) {}
 
     nonisolated func sessionDidDeactivate(_ session: WCSession) {
         session.activate()
+    }
+
+    /// Fires if the user pairs a Watch (or installs the companion app on one) while
+    /// the phone app is already running, not just at launch.
+    nonisolated func sessionWatchStateDidChange(_ session: WCSession) {
+        Task { @MainActor in self.acquireStoreIfNeeded() }
     }
 
     /// The Watch asks to perform a slot's action and waits for a reply, rather than

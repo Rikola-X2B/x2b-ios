@@ -8,10 +8,12 @@ import Foundation
 /// Live connection to a box over the X2BCP WebSocket API at
 /// `{ws|wss}://{host}/ws/x2b`.
 ///
-/// On connect: asks for the full control list (`GetControls`), then - unless told not
-/// to via `connect(baseUrl:trackLiveUpdates:)` - subscribes to all of them
-/// (`RegisterControls`) so the box pushes `ControlValueUpdate` messages whenever
-/// something changes. Reconnects with exponential backoff on drop.
+/// On connect: asks for the full control list (`GetControls`) - the protocol has no
+/// way to fetch just a handful of ids, so this part always returns everything the
+/// box knows about - then, unless told not to via
+/// `connect(baseUrl:trackLiveUpdates:registerIds:)`, subscribes to either specific
+/// ids or all of them (`RegisterControls`) so the box pushes `ControlValueUpdate`
+/// messages whenever something changes. Reconnects with exponential backoff on drop.
 @MainActor
 final class X2BWebSocketClient: ObservableObject {
     @Published private(set) var controls: [Int: X2BControl] = [:]
@@ -28,6 +30,7 @@ final class X2BWebSocketClient: ObservableObject {
     private var isStopped = true
     private var generation = 0
     private var trackLiveUpdates = true
+    private var registerIds: [Int]?
 
     /// - Parameters:
     ///   - baseUrl: the box's normalized connection URL, e.g.
@@ -41,10 +44,16 @@ final class X2BWebSocketClient: ObservableObject {
     ///     `false` - registering for every control on a box with a large number of
     ///     them means the box keeps re-sending values that will never be displayed,
     ///     for as long as that connection stays open.
-    func connect(baseUrl: String, trackLiveUpdates: Bool = true) {
+    ///   - registerIds: which control ids to register for when `trackLiveUpdates` is
+    ///     true, instead of literally every control the box reports. A caller that
+    ///     only ever displays a handful of them (e.g. 8 CarPlay slots) should pass
+    ///     those ids explicitly - nil falls back to registering everything, for a
+    ///     caller that genuinely needs live tracking of the whole list.
+    func connect(baseUrl: String, trackLiveUpdates: Bool = true, registerIds: [Int]? = nil) {
         isStopped = false
         self.baseUrl = baseUrl
         self.trackLiveUpdates = trackLiveUpdates
+        self.registerIds = registerIds
         generation += 1
         reconnectAttempt = 0
         Task { await openAndListen(generation: generation) }
@@ -175,7 +184,7 @@ final class X2BWebSocketClient: ObservableObject {
             }
             apply(controls)
             guard trackLiveUpdates else { return }
-            let ids = controls.map(\.id)
+            let ids = registerIds ?? controls.map(\.id)
             if !ids.isEmpty {
                 send(X2BWSSOutgoing.RegisterControls(ids: ids))
             }

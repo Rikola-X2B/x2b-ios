@@ -103,7 +103,11 @@ final class CarPlayEntityStore: ObservableObject {
         guard let url = ConnectionStore.shared.displayedConnection?.url, url != connectedUrl else { return }
         connectedUrl = url
         socket.disconnect()
-        socket.connect(baseUrl: url)
+        // Only register for the handful of controls actually assigned to a slot -
+        // there's no reason to have the box keep pushing updates for every other
+        // control it has just because GetControls' one-time fetch had to return all
+        // of them.
+        socket.connect(baseUrl: url, registerIds: slots.compactMap(\.controlId))
 
         userName = ""
         Task {
