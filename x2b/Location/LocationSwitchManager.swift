@@ -69,7 +69,10 @@ final class LocationSwitchManager: NSObject, ObservableObject {
         for region in manager.monitoredRegions {
             manager.stopMonitoring(for: region)
         }
-        guard isEnabled, CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) else { return }
+        guard isEnabled, CLLocationManager.isMonitoringAvailable(for: CLCircularRegion.self) else {
+            DebugLog.log("🔎 [Location] not monitoring (enabled=\(isEnabled), authorization=\(authorizationStatus.rawValue))")
+            return
+        }
 
         for connection in ConnectionStore.shared.connections {
             guard let coordinate = connection.coordinate else { continue }
@@ -79,6 +82,7 @@ final class LocationSwitchManager: NSObject, ObservableObject {
             // one) has to clear its presence control back to false on its own.
             region.notifyOnExit = true
             manager.startMonitoring(for: region)
+            DebugLog.log("🔎 [Location] monitoring \"\(connection.name)\", radius=\(Int(connection.geofenceRadius))m")
         }
     }
 
@@ -101,7 +105,9 @@ final class LocationSwitchManager: NSObject, ObservableObject {
 extension LocationSwitchManager: CLLocationManagerDelegate {
     nonisolated func locationManager(_ manager: CLLocationManager, didEnterRegion region: CLRegion) {
         Task { @MainActor in
+            DebugLog.log("🔎 [Location] didEnterRegion \(region.identifier)")
             guard let connection = ConnectionStore.shared.connections.first(where: { $0.id.uuidString == region.identifier }) else {
+                DebugLog.log("🔎 [Location] no connection matches region \(region.identifier) (deleted since?)")
                 return
             }
             ConnectionStore.shared.setActive(url: connection.url)
@@ -111,6 +117,7 @@ extension LocationSwitchManager: CLLocationManagerDelegate {
 
     nonisolated func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         Task { @MainActor in
+            DebugLog.log("🔎 [Location] didExitRegion \(region.identifier)")
             guard let connection = ConnectionStore.shared.connections.first(where: { $0.id.uuidString == region.identifier }) else {
                 return
             }
@@ -120,6 +127,7 @@ extension LocationSwitchManager: CLLocationManagerDelegate {
 
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         Task { @MainActor in
+            DebugLog.log("🔎 [Location] authorization changed: \(manager.authorizationStatus.rawValue)")
             self.authorizationStatus = manager.authorizationStatus
             if manager.authorizationStatus == .authorizedWhenInUse {
                 self.manager.requestAlwaysAuthorization()
@@ -129,6 +137,8 @@ extension LocationSwitchManager: CLLocationManagerDelegate {
     }
 
     nonisolated func locationManager(_ manager: CLLocationManager, monitoringDidFailFor region: CLRegion?, withError error: Error) {
-        print("🔎 [Location] region monitoring failed for \(region?.identifier ?? "?"): \(error.localizedDescription)")
+        Task { @MainActor in
+            DebugLog.log("🔎 [Location] region monitoring failed for \(region?.identifier ?? "?"): \(error.localizedDescription)")
+        }
     }
 }

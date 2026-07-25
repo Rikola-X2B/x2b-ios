@@ -105,6 +105,18 @@ struct SettingsView: View {
                     .foregroundColor(.white)
                     .frame(width: 48, height: 48)
             }
+            // Only once something has actually been logged - no point offering to
+            // share an empty/nonexistent file. Lets debug output (e.g. geofencing,
+            // which by nature needs testing away from a plugged-in Xcode console) be
+            // sent afterwards via Mail/Nachrichten/AirDrop instead.
+            if FileManager.default.fileExists(atPath: DebugLog.fileURL.path) {
+                ShareLink(item: DebugLog.fileURL) {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundColor(.white)
+                        .frame(width: 48, height: 48)
+                }
+            }
         }
         .padding(.horizontal, 8)
         .padding(.top, 8)

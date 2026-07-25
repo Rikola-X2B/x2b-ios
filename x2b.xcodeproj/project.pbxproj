@@ -51,6 +51,7 @@
 		324B854A841163AFCDB59C63 /* LocationSwitchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2B91DFED69656A44830FCB5A /* LocationSwitchManager.swift */; };
 		5AD2320E593EAF5A0A31C506 /* ConnectionLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7338C04F3153E9DC0849F3 /* ConnectionLocationView.swift */; };
 		9ED6F2263197E32184F93544 /* BoxSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63C199CCB64D3744A72F214 /* BoxSettingsView.swift */; };
+		637EBA1B469B6A966632802E /* DebugLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D11BEE5E9F1C145EB1F8EF8 /* DebugLog.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -141,6 +142,7 @@
 		2B91DFED69656A44830FCB5A /* LocationSwitchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationSwitchManager.swift; sourceTree = "<group>"; };
 		CD7338C04F3153E9DC0849F3 /* ConnectionLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionLocationView.swift; sourceTree = "<group>"; };
 		A63C199CCB64D3744A72F214 /* BoxSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxSettingsView.swift; sourceTree = "<group>"; };
+		2D11BEE5E9F1C145EB1F8EF8 /* DebugLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLog.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -321,6 +323,7 @@
 				7948A7C1F7828607A5AB4A5B /* Color+Hex.swift */,
 				133835BFA3E1063A9DB9ED32 /* AppVersionChecker.swift */,
 				119F2328F6B8044B79A79608 /* UIApplication+SafeArea.swift */,
+				2D11BEE5E9F1C145EB1F8EF8 /* DebugLog.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -544,6 +547,7 @@
 				324B854A841163AFCDB59C63 /* LocationSwitchManager.swift in Sources */,
 				5AD2320E593EAF5A0A31C506 /* ConnectionLocationView.swift in Sources */,
 				9ED6F2263197E32184F93544 /* BoxSettingsView.swift in Sources */,
+				637EBA1B469B6A966632802E /* DebugLog.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
