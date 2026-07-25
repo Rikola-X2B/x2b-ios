@@ -14,7 +14,7 @@ import UIKit
 /// out however many are actually passed in as few rows as fit (bigger buttons for
 /// fewer of them), which is why only assigned slots are shown at all.
 @MainActor
-final class CarPlaySceneDelegate: NSObject, @preconcurrency CPTemplateApplicationSceneDelegate {
+final class CarPlaySceneDelegate: NSObject, CPTemplateApplicationSceneDelegate {
     private var interfaceController: CPInterfaceController?
     private var storeSubscription: AnyCancellable?
     private let store = CarPlayEntityStore.shared
