@@ -82,7 +82,7 @@ struct ConnectionEditView: View {
         pushEnabled = existing.pushEnabled
 
         Task {
-            let info = await AppConfigService.fetchInternalIpAndSystemId(baseUrl: existing.url)
+            let info = await AppConfigService.fetchBoxInfo(baseUrl: existing.url)
             fetchedInternalIp = info.internalIp
             fetchedSystemId = info.systemId
         }

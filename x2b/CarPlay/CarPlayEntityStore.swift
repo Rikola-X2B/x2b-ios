@@ -7,9 +7,10 @@ import Foundation
 import Combine
 
 /// Bridges the currently displayed connection's `carPlaySlots` assignments to live
-/// data from `X2BWebSocketClient`, for both the real CarPlay grid and the
-/// phone-side preview - "displayed" so CarPlay follows a "Vorschau" preview too,
-/// not just the persisted active connection.
+/// data from `X2BWebSocketClient` (plus the box's logged-in user name from
+/// `AppConfigService`), for both the real CarPlay grid and the phone-side preview -
+/// "displayed" so CarPlay follows a "Vorschau" preview too, not just the persisted
+/// active connection.
 ///
 /// Multiple consumers (the CarPlay scene and the phone preview) can be interested at
 /// the same time, so this is reference-counted via `acquire()`/`release()` rather than
@@ -24,6 +25,9 @@ final class CarPlayEntityStore: ObservableObject {
 
     @Published private(set) var isConnected = false
     @Published private(set) var controls: [Int: X2BControl] = [:]
+    /// The box's currently logged-in user (`appconfig.json`'s `user.name`) - fetched
+    /// alongside the socket connection, purely for display (e.g. the CarPlay title).
+    @Published private(set) var userName = ""
 
     private let slotsKeyPath: KeyPath<Connection, [CarPlaySlotAssignment]>
     private let socket = X2BWebSocketClient()
@@ -69,6 +73,7 @@ final class CarPlayEntityStore: ObservableObject {
         connectedUrl = nil
         controls = [:]
         isConnected = false
+        userName = ""
     }
 
     var slots: [CarPlaySlotAssignment] {
@@ -99,6 +104,15 @@ final class CarPlayEntityStore: ObservableObject {
         connectedUrl = url
         socket.disconnect()
         socket.connect(baseUrl: url)
+
+        userName = ""
+        Task {
+            let info = await AppConfigService.fetchBoxInfo(baseUrl: url)
+            // The displayed box may have changed again before this returned - don't
+            // let a stale fetch overwrite the (by now different) current one's name.
+            guard url == self.connectedUrl else { return }
+            self.userName = info.userName
+        }
     }
 
     private func syncFromSocket() {

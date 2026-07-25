@@ -54,8 +54,10 @@ final class CarPlaySceneDelegate: NSObject, @preconcurrency CPTemplateApplicatio
         return template
     }
 
-    /// "X2B: <Boxname>" - the box's hostname with the shared ".x2.energy" domain
-    /// stripped off, since that part is the same for every box and just wastes space.
+    /// "X2B: <Boxname>, <Username>" - the box's hostname with the shared ".x2.energy"
+    /// domain stripped off (since that part is the same for every box and just
+    /// wastes space) and its first letter capitalized, followed by whichever user is
+    /// currently logged in on the box, once that's loaded.
     private func boxTitle() -> String {
         guard let urlString = ConnectionStore.shared.displayedConnection?.url,
               let host = URL(string: urlString)?.host else {
@@ -63,7 +65,10 @@ final class CarPlaySceneDelegate: NSObject, @preconcurrency CPTemplateApplicatio
         }
         let suffix = ".x2.energy"
         let shortName = host.hasSuffix(suffix) ? String(host.dropLast(suffix.count)) : host
-        return "X2B: \(shortName)"
+        let boxName = shortName.prefix(1).uppercased() + shortName.dropFirst()
+
+        guard !store.userName.isEmpty else { return "X2B: \(boxName)" }
+        return "X2B: \(boxName), \(store.userName)"
     }
 
     private func connectionStatusButton() -> CPBarButton {

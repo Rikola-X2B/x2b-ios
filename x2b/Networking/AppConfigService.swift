@@ -5,15 +5,17 @@
 
 import Foundation
 
-/// Fetches diagnostic info (`settings/appconfig.json`) from an X2B box,
-/// mirroring `SettingsActivity.fetchInternalIpAndSystemId` on Android.
+/// Fetches diagnostic and session info (`settings/appconfig.json`) from an X2B box -
+/// network diagnostics mirroring `SettingsActivity.fetchInternalIpAndSystemId` on
+/// Android, plus the box's currently logged-in user (`user.name`).
 enum AppConfigService {
     struct BoxInfo {
         var internalIp: String = "--"
         var systemId: String = "--"
+        var userName: String = ""
     }
 
-    static func fetchInternalIpAndSystemId(baseUrl: String) async -> BoxInfo {
+    static func fetchBoxInfo(baseUrl: String) async -> BoxInfo {
         let normalized = URLNormalizer.normalizeBase(baseUrl)
 
         var jsonString = await fetchJSON(urlString: normalized + "/settings/appconfig.json")
@@ -47,6 +49,10 @@ enum AppConfigService {
 
         if let system = object["system"] as? [String: Any], let id = system["id"] as? String {
             info.systemId = id
+        }
+
+        if let user = object["user"] as? [String: Any], let name = user["name"] as? String {
+            info.userName = name
         }
 
         return info
