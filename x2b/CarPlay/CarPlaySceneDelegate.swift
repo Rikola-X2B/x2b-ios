@@ -48,15 +48,22 @@ final class CarPlaySceneDelegate: NSObject, @preconcurrency CPTemplateApplicatio
     }
 
     private func makeGridTemplate() -> CPGridTemplate {
-        // No title text - CPGridTemplate has no API for a custom background/logo
-        // image (CarPlay renders that chrome itself), and the app's own icon
-        // already shows in the CarPlay sidebar, so a redundant "X2B" text title
-        // isn't worth the space. The freed-up top area instead gets a connection
-        // status icon via the nav bar buttons every CPTemplate supports.
         let buttons = store.slots.map(gridButton)
-        let template = CPGridTemplate(title: nil, gridButtons: buttons)
+        let template = CPGridTemplate(title: boxTitle(), gridButtons: buttons)
         template.trailingNavigationBarButtons = [connectionStatusButton()]
         return template
+    }
+
+    /// "X2B: <Boxname>" - the box's hostname with the shared ".x2.energy" domain
+    /// stripped off, since that part is the same for every box and just wastes space.
+    private func boxTitle() -> String {
+        guard let urlString = ConnectionStore.shared.displayedConnection?.url,
+              let host = URL(string: urlString)?.host else {
+            return "X2B"
+        }
+        let suffix = ".x2.energy"
+        let shortName = host.hasSuffix(suffix) ? String(host.dropLast(suffix.count)) : host
+        return "X2B: \(shortName)"
     }
 
     private func connectionStatusButton() -> CPBarButton {
@@ -88,8 +95,10 @@ final class CarPlaySceneDelegate: NSObject, @preconcurrency CPTemplateApplicatio
     }
 
     private func refreshGrid() {
-        guard let gridTemplate = interfaceController?.rootTemplate as? CPGridTemplate else { return }
-        gridTemplate.updateGridButtons(store.slots.map(gridButton))
-        gridTemplate.trailingNavigationBarButtons = [connectionStatusButton()]
+        // Recreated wholesale (rather than updateGridButtons + mutating title in
+        // place) so the title stays correct too if the displayed box itself changed,
+        // not just its buttons/status.
+        guard interfaceController?.rootTemplate is CPGridTemplate else { return }
+        interfaceController?.setRootTemplate(makeGridTemplate(), animated: false, completion: nil)
     }
 }

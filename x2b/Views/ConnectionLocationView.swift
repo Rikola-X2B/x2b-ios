@@ -20,6 +20,7 @@ struct ConnectionLocationView: View {
     @State private var cameraPosition: MapCameraPosition
     @State private var presenceControlId: Int?
     @State private var presenceControlName: String?
+    @State private var geofenceRadius: Double
     @State private var sortedControls: [X2BControl] = []
     @StateObject private var locator = OneShotLocator()
 
@@ -31,6 +32,7 @@ struct ConnectionLocationView: View {
         _coordinate = State(initialValue: initial)
         _presenceControlId = State(initialValue: connection.presenceControlId)
         _presenceControlName = State(initialValue: connection.presenceControlName)
+        _geofenceRadius = State(initialValue: connection.geofenceRadius)
         _cameraPosition = State(initialValue: .region(
             MKCoordinateRegion(
                 center: initial ?? CLLocationCoordinate2D(latitude: 47.3769, longitude: 8.5417),
@@ -45,6 +47,9 @@ struct ConnectionLocationView: View {
                 Map(position: $cameraPosition) {
                     if let coordinate {
                         Marker(connection.name, coordinate: coordinate)
+                        MapCircle(center: coordinate, radius: geofenceRadius)
+                            .foregroundStyle(Color(hex: "2196F3").opacity(0.15))
+                            .stroke(Color(hex: "2196F3"), lineWidth: 1.5)
                     }
                 }
                 .onTapGesture { point in
@@ -77,6 +82,17 @@ struct ConnectionLocationView: View {
                 }
 
                 Section {
+                    Stepper(
+                        "Radius: \(Int(geofenceRadius)) m",
+                        value: $geofenceRadius,
+                        in: 50...2000,
+                        step: 50
+                    )
+                } footer: {
+                    Text("Wie nah du an dieser Box sein musst, damit sie automatisch aktiv wird. Vorgabe: 250 m.")
+                }
+
+                Section {
                     Picker("Anwesenheits-Control", selection: presenceControlBinding) {
                         Text(presencePlaceholder).tag(Int?.none)
                         ForEach(sortedControls) { control in
@@ -98,6 +114,7 @@ struct ConnectionLocationView: View {
                     updated.longitude = coordinate?.longitude
                     updated.presenceControlId = presenceControlId
                     updated.presenceControlName = presenceControlName
+                    updated.geofenceRadius = geofenceRadius
                     onSave(updated)
                     dismiss()
                 }

@@ -30,6 +30,12 @@ struct Connection: Identifiable, Codable, Equatable {
     /// assignment time purely for display, same reasoning as `CarPlaySlotAssignment`.
     var presenceControlId: Int?
     var presenceControlName: String?
+    /// Radius in meters of this box's geofence, freely adjustable per box - 250m by
+    /// default (small enough to avoid overlapping a neighboring box, large enough to
+    /// absorb ordinary GPS accuracy noise).
+    var geofenceRadius: Double
+
+    static let defaultGeofenceRadius: Double = 250
 
     var coordinate: CLLocationCoordinate2D? {
         guard let latitude, let longitude else { return nil }
@@ -49,7 +55,8 @@ struct Connection: Identifiable, Codable, Equatable {
         latitude: Double? = nil,
         longitude: Double? = nil,
         presenceControlId: Int? = nil,
-        presenceControlName: String? = nil
+        presenceControlName: String? = nil,
+        geofenceRadius: Double = Connection.defaultGeofenceRadius
     ) {
         self.id = id
         self.name = name
@@ -64,11 +71,12 @@ struct Connection: Identifiable, Codable, Equatable {
         self.longitude = longitude
         self.presenceControlId = presenceControlId
         self.presenceControlName = presenceControlName
+        self.geofenceRadius = geofenceRadius
     }
 
     private enum CodingKeys: String, CodingKey {
         case id, name, url, status, internalIp, systemId, pushEnabled, carPlaySlots, watchSlots
-        case latitude, longitude, presenceControlId, presenceControlName
+        case latitude, longitude, presenceControlId, presenceControlName, geofenceRadius
     }
 
     // Manual Codable so connections persisted before carPlaySlots/watchSlots/location/
@@ -90,6 +98,8 @@ struct Connection: Identifiable, Codable, Equatable {
         longitude = try container.decodeIfPresent(Double.self, forKey: .longitude)
         presenceControlId = try container.decodeIfPresent(Int.self, forKey: .presenceControlId)
         presenceControlName = try container.decodeIfPresent(String.self, forKey: .presenceControlName)
+        geofenceRadius = try container.decodeIfPresent(Double.self, forKey: .geofenceRadius)
+            ?? Connection.defaultGeofenceRadius
     }
 
     func encode(to encoder: Encoder) throws {
@@ -107,5 +117,6 @@ struct Connection: Identifiable, Codable, Equatable {
         try container.encodeIfPresent(longitude, forKey: .longitude)
         try container.encodeIfPresent(presenceControlId, forKey: .presenceControlId)
         try container.encodeIfPresent(presenceControlName, forKey: .presenceControlName)
+        try container.encode(geofenceRadius, forKey: .geofenceRadius)
     }
 }

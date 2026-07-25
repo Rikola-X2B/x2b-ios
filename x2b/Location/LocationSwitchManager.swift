@@ -7,19 +7,15 @@ import Combine
 import CoreLocation
 
 /// Automatically switches the active connection to whichever box's saved location
-/// the phone is currently inside, using CoreLocation region monitoring (geofencing) -
-/// event-driven and low-power, and (with "Always" authorization) works even while
-/// the app isn't running, unlike continuous GPS tracking. Also sets each box's
-/// optional presence control to true on entering its region and back to false on
-/// leaving it (or entering another box's region).
+/// (and freely adjustable radius, `Connection.geofenceRadius`) the phone is currently
+/// inside, using CoreLocation region monitoring (geofencing) - event-driven and
+/// low-power, and (with "Always" authorization) works even while the app isn't
+/// running, unlike continuous GPS tracking. Also sets each box's optional presence
+/// control to true on entering its region and back to false on leaving it (or
+/// entering another box's region).
 @MainActor
 final class LocationSwitchManager: NSObject, ObservableObject {
     static let shared = LocationSwitchManager()
-
-    /// Smaller risks false negatives from ordinary GPS accuracy noise; larger risks
-    /// overlapping with a neighboring box's region. Fixed rather than exposed in the
-    /// location picker UI to keep that simple - could become per-box later if needed.
-    private static let regionRadius: CLLocationDistance = 250
 
     private let manager = CLLocationManager()
     private var connectionSubscription: AnyCancellable?
@@ -68,7 +64,7 @@ final class LocationSwitchManager: NSObject, ObservableObject {
 
         for connection in ConnectionStore.shared.connections {
             guard let coordinate = connection.coordinate else { continue }
-            let region = CLCircularRegion(center: coordinate, radius: Self.regionRadius, identifier: connection.id.uuidString)
+            let region = CLCircularRegion(center: coordinate, radius: connection.geofenceRadius, identifier: connection.id.uuidString)
             region.notifyOnEntry = true
             // Also needed now: leaving a box's own region (not just entering another
             // one) has to clear its presence control back to false on its own.
