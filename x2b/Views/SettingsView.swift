@@ -4,12 +4,14 @@
 //
 
 import SwiftUI
+import UIKit
 
 /// Connection manager, mirroring `activity_settings.xml` / `SettingsActivity`:
 /// a multi-select list of boxes with delete/edit/set-active actions, a per-row
 /// preview button, an edge-to-edge/status-bar display toggle, and an add button.
 struct SettingsView: View {
     @ObservedObject var connectionStore: ConnectionStore
+    @ObservedObject private var locationManager = LocationSwitchManager.shared
     var onPreview: (String) -> Void
 
     @Environment(\.dismiss) private var dismiss
@@ -34,6 +36,9 @@ struct SettingsView: View {
     var body: some View {
         VStack(spacing: 0) {
             header
+            if connectionStore.locationSwitchingEnabled && locationManager.authorizationStatus != .authorizedAlways {
+                locationPermissionWarning
+            }
             actionBar
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
@@ -104,6 +109,34 @@ struct SettingsView: View {
         .padding(.horizontal, 8)
         .padding(.top, 8)
         .background(Color.black)
+    }
+
+    /// iOS's automatic "Nur bei Nutzung" -> "Immer" upgrade prompt isn't reliable -
+    /// without "Immer", geofencing only fires while the app is open, not while
+    /// backgrounded or the phone is locked, so this points the user at Settings
+    /// directly rather than leaving them to wonder why switching silently stops.
+    private var locationPermissionWarning: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "exclamationmark.triangle.fill")
+                .foregroundColor(Color(hex: "FFA726"))
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Standortberechtigung unvollständig")
+                    .font(.footnote.bold())
+                    .foregroundColor(.white)
+                Text("Automatisches Umschalten funktioniert bei gesperrtem Handy nur mit \"Immer erlauben\".")
+                    .font(.caption)
+                    .foregroundColor(Color(hex: "AAAAAA"))
+            }
+            Spacer(minLength: 8)
+            Button("Öffnen", action: openLocationSettings)
+                .font(.caption.bold())
+                .foregroundColor(Color(hex: "2196F3"))
+        }
+        .padding(10)
+        .background(Color(hex: "2A2A2A"))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .padding(.horizontal, 16)
+        .padding(.top, 8)
     }
 
     private var actionBar: some View {
@@ -189,6 +222,11 @@ struct SettingsView: View {
 
     private func toggleLocationSwitching() {
         LocationSwitchManager.shared.setEnabled(!connectionStore.locationSwitchingEnabled)
+    }
+
+    private func openLocationSettings() {
+        guard let url = URL(string: UIApplication.openSettingsURLString) else { return }
+        UIApplication.shared.open(url)
     }
 
     private func toggleSelection(_ id: UUID) {

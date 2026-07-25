@@ -17,10 +17,19 @@ import CoreLocation
 final class LocationSwitchManager: NSObject, ObservableObject {
     static let shared = LocationSwitchManager()
 
+    /// Whether region monitoring can actually wake the app while it's backgrounded or
+    /// the phone is locked - only true with `.authorizedAlways`. iOS's automatic
+    /// When-In-Use -> Always upgrade prompt isn't reliably shown (it depends on prior
+    /// user choices and isn't guaranteed to reappear just because we ask again), so
+    /// callers should surface this and point the user at Settings instead of assuming
+    /// the upgrade request alone fixed it.
+    @Published private(set) var authorizationStatus: CLAuthorizationStatus
+
     private let manager = CLLocationManager()
     private var connectionSubscription: AnyCancellable?
 
     private override init() {
+        authorizationStatus = CLLocationManager().authorizationStatus
         super.init()
         manager.delegate = self
         connectionSubscription = ConnectionStore.shared.objectWillChange
@@ -111,6 +120,7 @@ extension LocationSwitchManager: CLLocationManagerDelegate {
 
     nonisolated func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
         Task { @MainActor in
+            self.authorizationStatus = manager.authorizationStatus
             if manager.authorizationStatus == .authorizedWhenInUse {
                 self.manager.requestAlwaysAuthorization()
             }
