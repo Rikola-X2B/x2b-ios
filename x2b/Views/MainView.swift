@@ -14,7 +14,15 @@ struct MainView: View {
 
     var onOpenSettings: () -> Void
 
+    @Environment(\.scenePhase) private var scenePhase
     @State private var errorMessage: String?
+    // A background geofence switch (LocationSwitchManager.setActive) updates
+    // ConnectionStore while the app isn't being drawn at all - SwiftUI records the
+    // change but doesn't reliably re-render an off-screen body just for it, so the
+    // WebView can still be showing the old box's page for a while after unlocking
+    // or reopening the app, until *something* forces a fresh body evaluation.
+    // Toggling this on returning to the foreground is that something.
+    @State private var foregroundRefreshTrigger = false
 
     // Read from UIKit rather than `geo.safeAreaInsets`, since a GeometryReader that
     // ignores the safe area on itself can't be trusted to still report it. Stored as
@@ -26,7 +34,12 @@ struct MainView: View {
     @State private var topSafeAreaInset: CGFloat = 0
 
     private var activeURLString: String {
-        connectionStore.displayedConnection?.url ?? ""
+        // Read, not just declared as a dependency - `foregroundRefreshTrigger` itself
+        // is meaningless, but SwiftUI only re-evaluates `body` for state it can see
+        // was actually read while computing it, so this line is what makes the
+        // toggle in `.onChange(of: scenePhase)` below actually matter.
+        _ = foregroundRefreshTrigger
+        return connectionStore.displayedConnection?.url ?? ""
     }
 
     var body: some View {
@@ -106,5 +119,10 @@ struct MainView: View {
         .ignoresSafeArea()
         .statusBar(hidden: connectionStore.edgeToEdge)
         .persistentSystemOverlays(connectionStore.edgeToEdge ? .hidden : .automatic)
+        .onChange(of: scenePhase) { _, newPhase in
+            if newPhase == .active {
+                foregroundRefreshTrigger.toggle()
+            }
+        }
     }
 }
