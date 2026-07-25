@@ -16,6 +16,9 @@ struct WatchSlotState: Codable, Identifiable, Equatable {
     let isOn: Bool
     let isAssigned: Bool
     let isActionable: Bool
+    /// The control's current value as text (e.g. a temperature reading) - only set
+    /// for "Wertanzeige" (readOnly) slots, nil for everything else.
+    let valueText: String?
 }
 
 /// The full payload pushed to the Watch via `WCSession.updateApplicationContext`.

@@ -8,9 +8,11 @@ import Combine
 import UIKit
 
 /// Drives the actual CarPlay screen, granted under the "CarPlay driving task"
-/// entitlement (Case-ID 10921911). Shows the active connection's 8 CarPlay slots
-/// (assigned in Settings) in a `CPGridTemplate` - CarPlay grid buttons support at
-/// most 8, which is exactly our slot count.
+/// entitlement (Case-ID 10921911). Shows the active connection's assigned CarPlay
+/// slots (up to 8, set in Settings) in a `CPGridTemplate` - CarPlay grid buttons
+/// support at most 8, which is exactly our slot count, and CPGridTemplate itself lays
+/// out however many are actually passed in as few rows as fit (bigger buttons for
+/// fewer of them), which is why only assigned slots are shown at all.
 @MainActor
 final class CarPlaySceneDelegate: NSObject, @preconcurrency CPTemplateApplicationSceneDelegate {
     private var interfaceController: CPInterfaceController?
@@ -48,10 +50,20 @@ final class CarPlaySceneDelegate: NSObject, @preconcurrency CPTemplateApplicatio
     }
 
     private func makeGridTemplate() -> CPGridTemplate {
-        let buttons = store.slots.map(gridButton)
+        let buttons = visibleSlots().map(gridButton)
         let template = CPGridTemplate(title: boxTitle(), gridButtons: buttons)
         template.trailingNavigationBarButtons = [connectionStatusButton()]
         return template
+    }
+
+    /// Only the slots that actually have a control assigned - CPGridTemplate lays
+    /// buttons out in as few rows as fit (e.g. 4 buttons -> 2x2), so fewer, larger
+    /// buttons for just what's actually configured beats always showing all 8
+    /// including empty "Nicht zugewiesen" placeholders. Falls back to showing all 8
+    /// if literally none are assigned yet, so the screen isn't just blank.
+    private func visibleSlots() -> [CarPlaySlotAssignment] {
+        let assigned = store.slots.filter { store.control(for: $0) != nil }
+        return assigned.isEmpty ? store.slots : assigned
     }
 
     /// "X2B: <Boxname>, <Username>" - the box's hostname with the shared ".x2.energy"
@@ -93,8 +105,8 @@ final class CarPlaySceneDelegate: NSObject, @preconcurrency CPTemplateApplicatio
         guard let control else {
             return slot.controlName.map { "\($0) (nicht verbunden)" } ?? "Nicht zugewiesen"
         }
-        if slot.type.behavior == .readOnly, case .string(let text) = control.value {
-            return "\(control.name): \(text)"
+        if slot.type.behavior == .readOnly {
+            return "\(control.name): \(control.value.displayString)"
         }
         return control.name
     }

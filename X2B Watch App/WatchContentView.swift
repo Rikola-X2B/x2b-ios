@@ -57,6 +57,11 @@ private struct WatchSlotPage: View {
                         .font(.system(size: 14, weight: .medium))
                         .multilineTextAlignment(.center)
                         .lineLimit(2)
+                    if let valueText = slot.valueText {
+                        Text(valueText)
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(.blue)
+                    }
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
             }

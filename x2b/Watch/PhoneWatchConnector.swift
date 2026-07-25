@@ -41,7 +41,13 @@ final class PhoneWatchConnector: NSObject, ObservableObject {
     private func pushContext() {
         guard WCSession.isSupported(), WCSession.default.activationState == .activated else { return }
 
-        let slots = store.slots.map { slot -> WatchSlotState in
+        // Only assigned slots, same reasoning as the CarPlay grid - a watch face has
+        // even less room to spare on empty "Nicht zugewiesen" placeholders. Falls
+        // back to all of them if literally none are assigned yet.
+        let assignedSlots = store.slots.filter { store.control(for: $0) != nil }
+        let visibleSlots = assignedSlots.isEmpty ? store.slots : assignedSlots
+
+        let slots = visibleSlots.map { slot -> WatchSlotState in
             let control = store.control(for: slot)
             let isOn = control?.value.boolValue ?? false
             return WatchSlotState(
@@ -50,7 +56,8 @@ final class PhoneWatchConnector: NSObject, ObservableObject {
                 iconName: slot.type.icon(isOn: isOn),
                 isOn: isOn,
                 isAssigned: control != nil,
-                isActionable: (control?.alterable ?? false) && slot.type.behavior != .readOnly
+                isActionable: (control?.alterable ?? false) && slot.type.behavior != .readOnly,
+                valueText: slot.type.behavior == .readOnly ? control?.value.displayString : nil
             )
         }
         let payload = WatchPayload(slots: slots, isConnected: store.isConnected)

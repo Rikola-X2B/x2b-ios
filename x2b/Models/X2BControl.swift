@@ -71,4 +71,19 @@ enum X2BControlValue: Codable, Equatable {
         default: return nil
         }
     }
+
+    /// A short, human-presentable form regardless of the underlying type - used by
+    /// "Wertanzeige" (readOnly) slots, whose value could be a string, a number (e.g. a
+    /// temperature), or a bool, depending on what's actually assigned.
+    var displayString: String {
+        switch self {
+        case .bool(let value): return value ? "Ein" : "Aus"
+        case .number(let value):
+            return value.truncatingRemainder(dividingBy: 1) == 0
+                ? String(Int(value))
+                : String(format: "%.1f", value)
+        case .string(let value): return value
+        case .null: return "–"
+        }
+    }
 }

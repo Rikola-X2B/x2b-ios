@@ -6,20 +6,40 @@
 import SwiftUI
 
 /// Phone-side preview of what the CarPlay screen shows for the active connection:
-/// the same 8 slots, the same live data, the same `CarPlayEntityStore` - just
-/// rendered with SwiftUI instead of `CPGridTemplate` so it can be tried out without
-/// a car or the CarPlay Simulator.
+/// the same slots, the same live data, the same `CarPlayEntityStore` - just rendered
+/// with SwiftUI instead of `CPGridTemplate` so it can be tried out without a car or
+/// the CarPlay Simulator. Mirrors the real CarPlay grid showing only assigned slots,
+/// with fewer/larger tiles the fewer of them there are.
 struct CarPlayPreviewView: View {
     @StateObject private var store = CarPlayEntityStore.shared
     @Environment(\.dismiss) private var dismiss
 
-    private let columns = [
-        GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())
-    ]
+    /// The slots actually shown, same rule as `CarPlaySceneDelegate.visibleSlots()`.
+    private var visibleSlots: [CarPlaySlotAssignment] {
+        let assigned = store.slots.filter { store.control(for: $0) != nil }
+        return assigned.isEmpty ? store.slots : assigned
+    }
+
+    /// Mirrors CPGridTemplate's own layout rule (at most 2 rows): 1-2 slots -> that
+    /// many columns, 3-4 -> 2x2, 5-6 -> 2x3, 7-8 -> 2x4.
+    private func columnCount(for slotCount: Int) -> Int {
+        switch slotCount {
+        case 0, 1, 2: return max(slotCount, 1)
+        case 3, 4: return 2
+        case 5, 6: return 3
+        default: return 4
+        }
+    }
 
     var body: some View {
         NavigationStack {
             GeometryReader { geo in
+                let slots = visibleSlots
+                let columns = Array(
+                    repeating: GridItem(.flexible()),
+                    count: columnCount(for: slots.count)
+                )
+
                 ZStack {
                     Color.black
 
@@ -30,7 +50,7 @@ struct CarPlayPreviewView: View {
                         .opacity(0.08)
 
                     LazyVGrid(columns: columns, spacing: 20) {
-                        ForEach(store.slots) { slot in
+                        ForEach(slots) { slot in
                             CarPlaySlotTile(slot: slot, store: store)
                         }
                     }
@@ -89,8 +109,8 @@ private struct CarPlaySlotTile: View {
                     .multilineTextAlignment(.center)
                     .lineLimit(2)
                     .minimumScaleFactor(0.8)
-                if slot.type.behavior == .readOnly, case .string(let text)? = control?.value {
-                    Text(text)
+                if slot.type.behavior == .readOnly, let control {
+                    Text(control.value.displayString)
                         .font(.system(size: 11, weight: .semibold))
                         .foregroundColor(Color(hex: "2196F3"))
                 }
