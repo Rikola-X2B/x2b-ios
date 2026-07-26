@@ -110,7 +110,15 @@ extension LocationSwitchManager: CLLocationManagerDelegate {
                 DebugLog.log("🔎 [Location] no connection matches region \(region.identifier) (deleted since?)")
                 return
             }
+            // A leftover "Vorschau" preview (see ContentView/SettingsView) takes
+            // priority over the active connection in `displayedConnection` - without
+            // clearing it here, an automatic geofence switch would silently update
+            // `activeConnectionUrl` while the screen kept showing the previewed box
+            // until Settings was opened again (which is the only other place that
+            // clears the preview).
+            ConnectionStore.shared.previewConnectionUrl = nil
             ConnectionStore.shared.setActive(url: connection.url)
+            DebugLog.log("🔎 [Location] switched active connection to \"\(connection.name)\"")
             self.setPresence(for: connection, isPresent: true)
         }
     }
