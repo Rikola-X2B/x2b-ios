@@ -52,6 +52,18 @@
 		5AD2320E593EAF5A0A31C506 /* ConnectionLocationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7338C04F3153E9DC0849F3 /* ConnectionLocationView.swift */; };
 		9ED6F2263197E32184F93544 /* BoxSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A63C199CCB64D3744A72F214 /* BoxSettingsView.swift */; };
 		637EBA1B469B6A966632802E /* DebugLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D11BEE5E9F1C145EB1F8EF8 /* DebugLog.swift */; };
+		1529F8CEB462FD98BD105E18 /* WidgetShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B46F832A51083F725D868 /* WidgetShared.swift */; };
+		2EA8031D521765FF22DBF2A9 /* WidgetShared.swift in Sources */ = {isa = PBXBuildFile; fileRef = A54B46F832A51083F725D868 /* WidgetShared.swift */; };
+		E8353C69A0304F5DA0E8279A /* WidgetBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 526A339020917E1BB3049CB8 /* WidgetBridge.swift */; };
+		08909A3E88432BE172886EDA /* X2BWidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = E40A0420B3FDAC64A73F666E /* X2BWidgetBundle.swift */; };
+		76F9B470529E8A8F79B6E9DE /* X2BWidget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1257D07A9EB4A47069794AE3 /* X2BWidget.swift */; };
+		DEC0EE79404B20C0A00E3E47 /* ToggleControlIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6292A784C2495BF8612A8259 /* ToggleControlIntent.swift */; };
+		7408EB22376C376B6718D8D5 /* X2BControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = A6E8E24AA13A95457CD943EA /* X2BControl.swift */; };
+		BDAF2B346CB4846B4180A04E /* CarPlaySlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4E3780DE09634D6A8E2D0FA9 /* CarPlaySlot.swift */; };
+		C2C61D6A76B996E420924716 /* X2BWSSMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = FF2908FD187EBE73991B6230 /* X2BWSSMessage.swift */; };
+		3E0B1A06306307D2D228365D /* X2BWebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7105950BAB6A71CC9228254A /* X2BWebSocketClient.swift */; };
+		F97F667084030090A92AF429 /* WebViewCookies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C50DC2C239015C43F77486 /* WebViewCookies.swift */; };
+		F50A850C5B57D5663E1B47DC /* X2BWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CAE6B93D956BD8E0E9573878 /* X2BWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeaderOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +88,13 @@
 			remoteGlobalIDString = 83BE656FEBBEDF53F98C1151;
 			remoteInfo = "X2B Watch App";
 		};
+		7DCD33D6E28B79AC019693F6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E1FBDBDF2D1DA50F006A5214 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D6A0520B552A0A8E1453612C;
+			remoteInfo = X2BWidgetExtension;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -88,6 +107,17 @@
 				25ED7395C1F6A0E4B5621DA6 /* X2B Watch App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3563E45B5653390E978AE176 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				F50A850C5B57D5663E1B47DC /* X2BWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -143,6 +173,14 @@
 		CD7338C04F3153E9DC0849F3 /* ConnectionLocationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectionLocationView.swift; sourceTree = "<group>"; };
 		A63C199CCB64D3744A72F214 /* BoxSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoxSettingsView.swift; sourceTree = "<group>"; };
 		2D11BEE5E9F1C145EB1F8EF8 /* DebugLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugLog.swift; sourceTree = "<group>"; };
+		A54B46F832A51083F725D868 /* WidgetShared.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetShared.swift; sourceTree = "<group>"; };
+		526A339020917E1BB3049CB8 /* WidgetBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetBridge.swift; sourceTree = "<group>"; };
+		CAE6B93D956BD8E0E9573878 /* X2BWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = X2BWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		E40A0420B3FDAC64A73F666E /* X2BWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BWidgetBundle.swift; sourceTree = "<group>"; };
+		1257D07A9EB4A47069794AE3 /* X2BWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BWidget.swift; sourceTree = "<group>"; };
+		6292A784C2495BF8612A8259 /* ToggleControlIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleControlIntent.swift; sourceTree = "<group>"; };
+		3734CE8F2D7ABF6EB15AE159 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		42F5621CEB6A2D965D30EFE0 /* X2BWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = X2BWidget.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -174,6 +212,13 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		88A337ECD431844AA8413A90 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -182,6 +227,7 @@
 			children = (
 				E1FBDBE92D1DA50F006A5214 /* x2b */,
 				43B336D45D5E72E991D5D9D6 /* X2B Watch App */,
+				5D6C4B7C39F17A2EB19F1EF9 /* X2BWidget */,
 				E1FBDBFA2D1DA512006A5214 /* x2bTests */,
 				E1FBDC042D1DA512006A5214 /* x2bUITests */,
 				E1FBDBE82D1DA50F006A5214 /* Products */,
@@ -195,8 +241,21 @@
 				E1FBDBF72D1DA512006A5214 /* x2bTests.xctest */,
 				E1FBDC012D1DA512006A5214 /* x2bUITests.xctest */,
 				E17446EC37C94AD9605DA7DA /* X2B Watch App.app */,
+				CAE6B93D956BD8E0E9573878 /* X2BWidgetExtension.appex */,
 			);
 			name = Products;
+			sourceTree = "<group>";
+		};
+		5D6C4B7C39F17A2EB19F1EF9 /* X2BWidget */ = {
+			isa = PBXGroup;
+			children = (
+				E40A0420B3FDAC64A73F666E /* X2BWidgetBundle.swift */,
+				1257D07A9EB4A47069794AE3 /* X2BWidget.swift */,
+				6292A784C2495BF8612A8259 /* ToggleControlIntent.swift */,
+				3734CE8F2D7ABF6EB15AE159 /* Info.plist */,
+				42F5621CEB6A2D965D30EFE0 /* X2BWidget.entitlements */,
+			);
+			path = X2BWidget;
 			sourceTree = "<group>";
 		};
 		43B336D45D5E72E991D5D9D6 /* X2B Watch App */ = {
@@ -227,6 +286,15 @@
 			path = Location;
 			sourceTree = "<group>";
 		};
+		1C366A6EC236AF78B3A46C2A /* Widget */ = {
+			isa = PBXGroup;
+			children = (
+				A54B46F832A51083F725D868 /* WidgetShared.swift */,
+				526A339020917E1BB3049CB8 /* WidgetBridge.swift */,
+			);
+			path = Widget;
+			sourceTree = "<group>";
+		};
 		E1FBDBE92D1DA50F006A5214 /* x2b */ = {
 			isa = PBXGroup;
 			children = (
@@ -240,6 +308,7 @@
 				ACBCC6878EA61EF88A6EDD27 /* CarPlay */,
 				3A41928281D7908528ABFBC5 /* Watch */,
 				035254D3FF4DE7EF52E9CC69 /* Location */,
+				1C366A6EC236AF78B3A46C2A /* Widget */,
 				907524DF3587CFFFBFF17683 /* Support */,
 				C74EB409EE209E51E0BCE334 /* Info.plist */,
 				424DDAAD41028EE1C3E663A4 /* x2b.entitlements */,
@@ -364,11 +433,13 @@
 				E1FBDBE42D1DA50F006A5214 /* Frameworks */,
 				E1FBDBE52D1DA50F006A5214 /* Resources */,
 				7E2229FCFB9E4096D4ED718C /* Embed Watch Content */,
+				3563E45B5653390E978AE176 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				7A247BE49BD626815EEDD7C0 /* PBXTargetDependency */,
+				3AFDD94F8AC78B1F1894F7BD /* PBXTargetDependency */,
 			);
 			name = x2b;
 			productName = x2b;
@@ -391,6 +462,23 @@
 			productName = "X2B Watch App";
 			productReference = E17446EC37C94AD9605DA7DA /* X2B Watch App.app */;
 			productType = "com.apple.product-type.application";
+		};
+		D6A0520B552A0A8E1453612C /* X2BWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 20890A6B79AA6B147C5AEA68 /* Build configuration list for PBXNativeTarget "X2BWidgetExtension" */;
+			buildPhases = (
+				18BDB159200CD001D2F80743 /* Sources */,
+				88A337ECD431844AA8413A90 /* Frameworks */,
+				59224D8A524657D72AC7792C /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = X2BWidgetExtension;
+			productName = X2BWidgetExtension;
+			productReference = CAE6B93D956BD8E0E9573878 /* X2BWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		E1FBDBF62D1DA512006A5214 /* x2bTests */ = {
 			isa = PBXNativeTarget;
@@ -452,6 +540,9 @@
 					83BE656FEBBEDF53F98C1151 = {
 						CreatedOnToolsVersion = 15.4;
 					};
+					D6A0520B552A0A8E1453612C = {
+						CreatedOnToolsVersion = 15.4;
+					};
 				};
 			};
 			buildConfigurationList = E1FBDBE22D1DA50F006A5214 /* Build configuration list for PBXProject "x2b" */;
@@ -471,6 +562,7 @@
 				E1FBDBF62D1DA512006A5214 /* x2bTests */,
 				E1FBDC002D1DA512006A5214 /* x2bUITests */,
 				83BE656FEBBEDF53F98C1151 /* X2B Watch App */,
+				D6A0520B552A0A8E1453612C /* X2BWidgetExtension */,
 			);
 		};
 /* End PBXProject section */
@@ -493,6 +585,13 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		E1FBDBFF2D1DA512006A5214 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		59224D8A524657D72AC7792C /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -548,6 +647,8 @@
 				5AD2320E593EAF5A0A31C506 /* ConnectionLocationView.swift in Sources */,
 				9ED6F2263197E32184F93544 /* BoxSettingsView.swift in Sources */,
 				637EBA1B469B6A966632802E /* DebugLog.swift in Sources */,
+				1529F8CEB462FD98BD105E18 /* WidgetShared.swift in Sources */,
+				E8353C69A0304F5DA0E8279A /* WidgetBridge.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -579,6 +680,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		18BDB159200CD001D2F80743 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				08909A3E88432BE172886EDA /* X2BWidgetBundle.swift in Sources */,
+				76F9B470529E8A8F79B6E9DE /* X2BWidget.swift in Sources */,
+				DEC0EE79404B20C0A00E3E47 /* ToggleControlIntent.swift in Sources */,
+				2EA8031D521765FF22DBF2A9 /* WidgetShared.swift in Sources */,
+				7408EB22376C376B6718D8D5 /* X2BControl.swift in Sources */,
+				BDAF2B346CB4846B4180A04E /* CarPlaySlot.swift in Sources */,
+				C2C61D6A76B996E420924716 /* X2BWSSMessage.swift in Sources */,
+				3E0B1A06306307D2D228365D /* X2BWebSocketClient.swift in Sources */,
+				F97F667084030090A92AF429 /* WebViewCookies.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -596,6 +713,11 @@
 			isa = PBXTargetDependency;
 			target = 83BE656FEBBEDF53F98C1151 /* X2B Watch App */;
 			targetProxy = BA2005BD2C710A740B3CF1E8 /* PBXContainerItemProxy */;
+		};
+		3AFDD94F8AC78B1F1894F7BD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D6A0520B552A0A8E1453612C /* X2BWidgetExtension */;
+			targetProxy = 7DCD33D6E28B79AC019693F6 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -884,6 +1006,41 @@
 			};
 			name = Release;
 		};
+		C5CBBABDD011F0BEA49DE895 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = X2BWidget/X2BWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 62LZW2UPSK;
+				INFOPLIST_FILE = X2BWidget/Info.plist;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = energy.inno.x2b.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		8525995F9807F05C9FFEB50F /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = X2BWidget/X2BWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 62LZW2UPSK;
+				INFOPLIST_FILE = X2BWidget/Info.plist;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = energy.inno.x2b.widget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -928,6 +1085,15 @@
 			buildConfigurations = (
 				21F50AF9ECCA5E5BEEEE3DE6 /* Debug */,
 				704B81DAC82B913CC6C2D899 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		20890A6B79AA6B147C5AEA68 /* Build configuration list for PBXNativeTarget "X2BWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C5CBBABDD011F0BEA49DE895 /* Debug */,
+				8525995F9807F05C9FFEB50F /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -16,6 +16,9 @@ struct x2bApp: App {
     // Same reasoning: if location-based switching was already enabled, resume
     // monitoring immediately on launch rather than waiting for Settings to be opened.
     private let locationSwitchManager = LocationSwitchManager.shared
+    // Keeps the X2BWidget extension's App Group data current from the start, not
+    // just whenever some other view happens to touch ConnectionStore first.
+    private let widgetBridge = WidgetBridge.shared
 
     var body: some Scene {
         WindowGroup {

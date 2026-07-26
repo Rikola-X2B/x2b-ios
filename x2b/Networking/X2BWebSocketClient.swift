@@ -31,6 +31,7 @@ final class X2BWebSocketClient: ObservableObject {
     private var generation = 0
     private var trackLiveUpdates = true
     private var registerIds: [Int]?
+    private var cookieOverride: [HTTPCookie]?
 
     /// - Parameters:
     ///   - baseUrl: the box's normalized connection URL, e.g.
@@ -49,14 +50,36 @@ final class X2BWebSocketClient: ObservableObject {
     ///     only ever displays a handful of them (e.g. 8 CarPlay slots) should pass
     ///     those ids explicitly - nil falls back to registering everything, for a
     ///     caller that genuinely needs live tracking of the whole list.
-    func connect(baseUrl: String, trackLiveUpdates: Bool = true, registerIds: [Int]? = nil) {
+    ///   - cookieOverride: pre-fetched cookies to use instead of looking them up from
+    ///     the main app's `WKWebsiteDataStore` - needed by the X2BWidget extension,
+    ///     which runs in its own process with no access to that store at all, and so
+    ///     gets its cookies relayed from the main app via the shared App Group
+    ///     instead (see `WidgetShared`).
+    func connect(baseUrl: String, trackLiveUpdates: Bool = true, registerIds: [Int]? = nil, cookieOverride: [HTTPCookie]? = nil) {
         isStopped = false
         self.baseUrl = baseUrl
         self.trackLiveUpdates = trackLiveUpdates
         self.registerIds = registerIds
+        self.cookieOverride = cookieOverride
         generation += 1
         reconnectAttempt = 0
         Task { await openAndListen(generation: generation) }
+    }
+
+    /// One-shot fetch for a caller that can't stay connected (e.g. a widget's
+    /// `TimelineProvider`, which just needs a snapshot) - connects, waits briefly for
+    /// `GetControlsResponse` to populate `controls`, then disconnects. Polls rather
+    /// than awaiting a proper completion since the rest of this class is
+    /// callback/Combine-based, not structured around single awaitable requests.
+    func fetchControlsOnce(baseUrl: String, cookieOverride: [HTTPCookie]? = nil, timeout: TimeInterval = 5) async -> [Int: X2BControl] {
+        connect(baseUrl: baseUrl, trackLiveUpdates: false, cookieOverride: cookieOverride)
+        let deadline = Date().addingTimeInterval(timeout)
+        while controls.isEmpty && Date() < deadline {
+            try? await Task.sleep(nanoseconds: 200_000_000)
+        }
+        let result = controls
+        disconnect()
+        return result
     }
 
     func disconnect() {
@@ -90,7 +113,7 @@ final class X2BWebSocketClient: ObservableObject {
         // URLSession attaches to matching-domain requests - including this one -
         // automatically.
         let configuration = URLSessionConfiguration.default
-        let cookies = await WebViewCookies.matching(for: baseUrl)
+        let cookies = cookieOverride ?? (await WebViewCookies.matching(for: baseUrl))
         if !cookies.isEmpty {
             cookies.forEach { HTTPCookieStorage.shared.setCookie($0) }
             configuration.httpCookieStorage = .shared
