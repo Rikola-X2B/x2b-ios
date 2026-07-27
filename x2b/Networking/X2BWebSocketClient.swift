@@ -113,7 +113,12 @@ final class X2BWebSocketClient: ObservableObject {
         // URLSession attaches to matching-domain requests - including this one -
         // automatically.
         let configuration = URLSessionConfiguration.default
-        let cookies = cookieOverride ?? (await WebViewCookies.matching(for: baseUrl))
+        let cookies: [HTTPCookie]
+        if let cookieOverride {
+            cookies = cookieOverride
+        } else {
+            cookies = await WebViewCookies.matching(for: baseUrl)
+        }
         if !cookies.isEmpty {
             cookies.forEach { HTTPCookieStorage.shared.setCookie($0) }
             configuration.httpCookieStorage = .shared
