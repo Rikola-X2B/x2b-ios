@@ -47,7 +47,7 @@ final class ConnectionStore: ObservableObject {
 
     init(defaults: UserDefaults = .standard) {
         self.defaults = defaults
-        self.edgeToEdge = defaults.object(forKey: Keys.edgeToEdge) as? Bool ?? true
+        self.edgeToEdge = defaults.object(forKey: Keys.edgeToEdge) as? Bool ?? false
         self.locationSwitchingEnabled = defaults.object(forKey: Keys.locationSwitchingEnabled) as? Bool ?? false
         self.activeConnectionUrl = defaults.string(forKey: Keys.activeConnectionUrl) ?? ""
         load()
