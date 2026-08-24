@@ -64,6 +64,7 @@
 		3E0B1A06306307D2D228365D /* X2BWebSocketClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7105950BAB6A71CC9228254A /* X2BWebSocketClient.swift */; };
 		F97F667084030090A92AF429 /* WebViewCookies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C50DC2C239015C43F77486 /* WebViewCookies.swift */; };
 		F50A850C5B57D5663E1B47DC /* X2BWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CAE6B93D956BD8E0E9573878 /* X2BWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeaderOnCopy, ); }; };
+		1C0AE91F9E16408C69CFC658 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 456159816F248433CF1E7001 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -165,6 +166,7 @@
 		CDA3AB166078FFA70DDE1DF9 /* WatchSlotState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSlotState.swift; sourceTree = "<group>"; };
 		0FB839D44C0A4E3F41165DB1 /* WatchSlotsAssignmentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchSlotsAssignmentView.swift; sourceTree = "<group>"; };
 		E17446EC37C94AD9605DA7DA /* X2B Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "X2B Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		456159816F248433CF1E7001 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		61AF223973F4D19E660FEC64 /* X2BWatchApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BWatchApp.swift; sourceTree = "<group>"; };
 		8E114AEA0078D89830E8ECE9 /* WatchContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchContentView.swift; sourceTree = "<group>"; };
 		16BA9492B0F7B34BCC70EB24 /* WatchConnector.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WatchConnector.swift; sourceTree = "<group>"; };
@@ -265,6 +267,7 @@
 				8E114AEA0078D89830E8ECE9 /* WatchContentView.swift */,
 				16BA9492B0F7B34BCC70EB24 /* WatchConnector.swift */,
 				320EA4B7FAE4FC19D85A4A93 /* Info.plist */,
+				456159816F248433CF1E7001 /* Assets.xcassets */,
 			);
 			path = "X2B Watch App";
 			sourceTree = "<group>";
@@ -602,6 +605,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1C0AE91F9E16408C69CFC658 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -970,6 +974,7 @@
 		21F50AF9ECCA5E5BEEEE3DE6 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -990,6 +995,7 @@
 		704B81DAC82B913CC6C2D899 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
