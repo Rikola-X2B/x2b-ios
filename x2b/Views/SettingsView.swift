@@ -186,7 +186,10 @@ struct SettingsView: View {
                         isSelected: selectedIDs.contains(connection.id),
                         onTap: { toggleSelection(connection.id) },
                         onPreview: { onPreview(connection.url) },
-                        onConfigure: { configuringConnection = connection }
+                        onConfigure: {
+                            DebugLog.log("💾 [Settings] opening BoxSettings for \"\(connection.name)\" (\(connection.id))")
+                            configuringConnection = connection
+                        }
                     )
                 }
             }

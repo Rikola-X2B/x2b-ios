@@ -102,6 +102,7 @@ struct ConnectionEditView: View {
         connection.url = normalizedUrl
         connection.pushEnabled = pushEnabled
 
+        DebugLog.log("💾 [ConnectionEdit] saving \"\(connection.name)\" (\(connection.id)), existing=\(existing != nil)")
         onSave(connection)
         dismiss()
     }

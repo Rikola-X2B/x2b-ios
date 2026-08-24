@@ -86,7 +86,10 @@ struct BoxSettingsView: View {
         // control-related destinations, not live values - registering for updates on
         // every one of the box's controls would just mean it keeps re-sending values
         // none of them display, for as long as this screen is open.
-        .onAppear { client.connect(baseUrl: connection.url, trackLiveUpdates: false) }
+        .onAppear {
+            DebugLog.log("💾 [BoxSettings] showing \"\(connection.name)\" (\(connection.id))")
+            client.connect(baseUrl: connection.url, trackLiveUpdates: false)
+        }
         .onDisappear { client.disconnect() }
     }
 }

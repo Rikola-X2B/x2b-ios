@@ -79,12 +79,17 @@ final class ConnectionStore: ObservableObject {
     func add(_ connection: Connection) {
         connections.append(connection)
         persist()
+        DebugLog.log("💾 [Connections] added \"\(connection.name)\" (\(connection.id)), total=\(connections.count)")
     }
 
     func update(_ connection: Connection) {
-        guard let index = connections.firstIndex(where: { $0.id == connection.id }) else { return }
+        guard let index = connections.firstIndex(where: { $0.id == connection.id }) else {
+            DebugLog.log("💾 [Connections] update FAILED - no connection with id \(connection.id) in store (have: \(connections.map(\.id)))")
+            return
+        }
         connections[index] = connection
         persist()
+        DebugLog.log("💾 [Connections] updated \"\(connection.name)\" (\(connection.id)) at index \(index)")
     }
 
     func delete(ids: Set<UUID>) {
