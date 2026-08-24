@@ -95,20 +95,29 @@ final class CarPlaySceneDelegate: NSObject, CPTemplateApplicationSceneDelegate {
         let control = store.control(for: slot)
         let isOn = control?.value.boolValue ?? false
         let image = UIImage(systemName: slot.type.icon(isOn: isOn)) ?? UIImage()
-        let button = CPGridButton(titleVariants: [displayTitle(for: slot, control: control)], image: image) { [weak self] _ in
+        let button = CPGridButton(titleVariants: titleVariants(for: slot, control: control), image: image) { [weak self] _ in
             self?.store.performAction(for: slot)
         }
         return button
     }
 
-    private func displayTitle(for slot: CarPlaySlotAssignment, control: X2BControl?) -> String {
+    /// Most-to-least preferred, per `CPGridButton.titleVariants`'s own contract -
+    /// CarPlay renders whichever variant actually fits the button's available space
+    /// and otherwise falls back down the list, rather than wrapping or scrolling. A
+    /// single "Name: Wert" string has no fallback of its own: if it doesn't fit on the
+    /// real CarPlay screen, CarPlay just truncates it from the right, which silently
+    /// drops exactly the value a "Wertanzeige" slot exists to show (the name comes
+    /// first, the value after the colon). Listing the value alone as a shorter second
+    /// variant lets it survive that truncation instead of disappearing.
+    private func titleVariants(for slot: CarPlaySlotAssignment, control: X2BControl?) -> [String] {
         guard let control else {
-            return slot.controlName.map { "\($0) (nicht verbunden)" } ?? "Nicht zugewiesen"
+            guard let controlName = slot.controlName else { return ["Nicht zugewiesen"] }
+            return ["\(controlName) (nicht verbunden)", controlName]
         }
         if slot.type.behavior == .readOnly {
-            return "\(control.name): \(control.value.displayString)"
+            return ["\(control.name): \(control.value.displayString)", control.value.displayString]
         }
-        return control.name
+        return [control.name]
     }
 
     private func refreshGrid() {
