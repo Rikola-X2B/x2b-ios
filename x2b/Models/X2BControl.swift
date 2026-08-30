@@ -9,9 +9,13 @@ import Foundation
 /// `{ "id": 1234567890001273, "type": "switch", "name": "Garagentor", "value": true,
 /// "alterable": true }`.
 ///
-/// The API defines exactly four `type` values: `"switch"` (bool on/off),
-/// `"pushButton"` (bool, turns itself back off after a moment - used for scenes),
-/// `"text"` (display-only string), and `"light"` (bool on/off, semantically a light).
+/// The API defines six `type` values: `"switch"` (bool on/off), `"pushButton"` (bool,
+/// turns itself back off after a moment - used for scenes), `"text"` (display-only
+/// string), `"light"` (bool on/off, semantically a light), `"blind"` (a
+/// roller shutter/blind - `value` is a 0-100 height percentage, 0 = closed, 100 =
+/// open), and `"radioPlayer"` (a Sonos favorite - `value` is the currently playing
+/// favorite's name as a string, or null when stopped; `SetControlValue` with a
+/// favorite name plays it, an empty string or null stops it).
 /// `alterable` is false for display-only controls *and* for controls the user simply
 /// isn't allowed/able to operate right now, independent of `type`.
 struct X2BControl: Codable, Identifiable, Equatable {
@@ -19,6 +23,8 @@ struct X2BControl: Codable, Identifiable, Equatable {
     static let typePushButton = "pushButton"
     static let typeText = "text"
     static let typeLight = "light"
+    static let typeBlind = "blind"
+    static let typeRadioPlayer = "radioPlayer"
 
     let id: Int
     let type: String

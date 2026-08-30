@@ -65,6 +65,11 @@
 		F97F667084030090A92AF429 /* WebViewCookies.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82C50DC2C239015C43F77486 /* WebViewCookies.swift */; };
 		F50A850C5B57D5663E1B47DC /* X2BWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = CAE6B93D956BD8E0E9573878 /* X2BWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeaderOnCopy, ); }; };
 		1C0AE91F9E16408C69CFC658 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 456159816F248433CF1E7001 /* Assets.xcassets */; };
+		B4504FB61EB8A24D978392ED /* ControlIntentSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = E41E42A1B438906E5A5D1D93 /* ControlIntentSupport.swift */; };
+		F18FD5854C6356D275207D6E /* X2BControlEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 77FD68987668FCA2551EE794 /* X2BControlEntity.swift */; };
+		A538B820C67C10B5289077EF /* BlindIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0418E7530821A9E369ED1B /* BlindIntents.swift */; };
+		73174681A4CDF6EE8D160A20 /* RadioIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3F2BF1D01EB02C82A951BB /* RadioIntents.swift */; };
+		69D61C1E28717DFAF83C8047 /* X2BShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0DD5CAD4BCCFF6C580F9D2 /* X2BShortcuts.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -181,6 +186,11 @@
 		E40A0420B3FDAC64A73F666E /* X2BWidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BWidgetBundle.swift; sourceTree = "<group>"; };
 		1257D07A9EB4A47069794AE3 /* X2BWidget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BWidget.swift; sourceTree = "<group>"; };
 		6292A784C2495BF8612A8259 /* ToggleControlIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToggleControlIntent.swift; sourceTree = "<group>"; };
+		E41E42A1B438906E5A5D1D93 /* ControlIntentSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ControlIntentSupport.swift; sourceTree = "<group>"; };
+		77FD68987668FCA2551EE794 /* X2BControlEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BControlEntity.swift; sourceTree = "<group>"; };
+		3E0418E7530821A9E369ED1B /* BlindIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlindIntents.swift; sourceTree = "<group>"; };
+		3F3F2BF1D01EB02C82A951BB /* RadioIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioIntents.swift; sourceTree = "<group>"; };
+		7E0DD5CAD4BCCFF6C580F9D2 /* X2BShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BShortcuts.swift; sourceTree = "<group>"; };
 		3734CE8F2D7ABF6EB15AE159 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42F5621CEB6A2D965D30EFE0 /* X2BWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = X2BWidget.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -254,6 +264,11 @@
 				E40A0420B3FDAC64A73F666E /* X2BWidgetBundle.swift */,
 				1257D07A9EB4A47069794AE3 /* X2BWidget.swift */,
 				6292A784C2495BF8612A8259 /* ToggleControlIntent.swift */,
+				E41E42A1B438906E5A5D1D93 /* ControlIntentSupport.swift */,
+				77FD68987668FCA2551EE794 /* X2BControlEntity.swift */,
+				3E0418E7530821A9E369ED1B /* BlindIntents.swift */,
+				3F3F2BF1D01EB02C82A951BB /* RadioIntents.swift */,
+				7E0DD5CAD4BCCFF6C580F9D2 /* X2BShortcuts.swift */,
 				3734CE8F2D7ABF6EB15AE159 /* Info.plist */,
 				42F5621CEB6A2D965D30EFE0 /* X2BWidget.entitlements */,
 			);
@@ -691,6 +706,11 @@
 				08909A3E88432BE172886EDA /* X2BWidgetBundle.swift in Sources */,
 				76F9B470529E8A8F79B6E9DE /* X2BWidget.swift in Sources */,
 				DEC0EE79404B20C0A00E3E47 /* ToggleControlIntent.swift in Sources */,
+				B4504FB61EB8A24D978392ED /* ControlIntentSupport.swift in Sources */,
+				F18FD5854C6356D275207D6E /* X2BControlEntity.swift in Sources */,
+				A538B820C67C10B5289077EF /* BlindIntents.swift in Sources */,
+				73174681A4CDF6EE8D160A20 /* RadioIntents.swift in Sources */,
+				69D61C1E28717DFAF83C8047 /* X2BShortcuts.swift in Sources */,
 				2EA8031D521765FF22DBF2A9 /* WidgetShared.swift in Sources */,
 				7408EB22376C376B6718D8D5 /* X2BControl.swift in Sources */,
 				BDAF2B346CB4846B4180A04E /* CarPlaySlot.swift in Sources */,
