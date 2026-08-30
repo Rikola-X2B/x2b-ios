@@ -70,6 +70,7 @@
 		A538B820C67C10B5289077EF /* BlindIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3E0418E7530821A9E369ED1B /* BlindIntents.swift */; };
 		73174681A4CDF6EE8D160A20 /* RadioIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F3F2BF1D01EB02C82A951BB /* RadioIntents.swift */; };
 		69D61C1E28717DFAF83C8047 /* X2BShortcuts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7E0DD5CAD4BCCFF6C580F9D2 /* X2BShortcuts.swift */; };
+		127D1031043E18B3BD1AA154 /* SwitchIntents.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2848B5A664E7B9FB5D7F4A56 /* SwitchIntents.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -191,6 +192,7 @@
 		3E0418E7530821A9E369ED1B /* BlindIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlindIntents.swift; sourceTree = "<group>"; };
 		3F3F2BF1D01EB02C82A951BB /* RadioIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioIntents.swift; sourceTree = "<group>"; };
 		7E0DD5CAD4BCCFF6C580F9D2 /* X2BShortcuts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = X2BShortcuts.swift; sourceTree = "<group>"; };
+		2848B5A664E7B9FB5D7F4A56 /* SwitchIntents.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchIntents.swift; sourceTree = "<group>"; };
 		3734CE8F2D7ABF6EB15AE159 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42F5621CEB6A2D965D30EFE0 /* X2BWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = X2BWidget.entitlements; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -266,6 +268,7 @@
 				6292A784C2495BF8612A8259 /* ToggleControlIntent.swift */,
 				E41E42A1B438906E5A5D1D93 /* ControlIntentSupport.swift */,
 				77FD68987668FCA2551EE794 /* X2BControlEntity.swift */,
+				2848B5A664E7B9FB5D7F4A56 /* SwitchIntents.swift */,
 				3E0418E7530821A9E369ED1B /* BlindIntents.swift */,
 				3F3F2BF1D01EB02C82A951BB /* RadioIntents.swift */,
 				7E0DD5CAD4BCCFF6C580F9D2 /* X2BShortcuts.swift */,
@@ -708,6 +711,7 @@
 				DEC0EE79404B20C0A00E3E47 /* ToggleControlIntent.swift in Sources */,
 				B4504FB61EB8A24D978392ED /* ControlIntentSupport.swift in Sources */,
 				F18FD5854C6356D275207D6E /* X2BControlEntity.swift in Sources */,
+				127D1031043E18B3BD1AA154 /* SwitchIntents.swift in Sources */,
 				A538B820C67C10B5289077EF /* BlindIntents.swift in Sources */,
 				73174681A4CDF6EE8D160A20 /* RadioIntents.swift in Sources */,
 				69D61C1E28717DFAF83C8047 /* X2BShortcuts.swift in Sources */,

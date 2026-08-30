@@ -8,9 +8,12 @@ import AppIntents
 /// Registers every control-affecting intent as an App Shortcut - the mechanism that
 /// makes them directly reachable via "Hey Siri" without the user ever creating a
 /// Shortcut by hand, since these are indexed automatically the first time this
-/// extension runs. `ToggleControlIntent`'s own parameters (a raw `controlId` plus the
-/// widget-only `currentIsOn`/`isScene` flags) aren't voice-friendly, so its phrase
-/// doesn't reference them - Siri falls back to asking for each one conversationally.
+/// extension runs. Named, single-utterance phrases ("Wohnzimmerlicht ausschalten")
+/// need an intent whose parameter is resolved by name, which is what `TurnOnIntent`/
+/// `TurnOffIntent` are for. `ToggleControlIntent` itself stays as-is for the widget's
+/// own tap gesture - its parameters (a raw `controlId` plus the widget-only
+/// `currentIsOn`/`isScene` flags) aren't voice-friendly, so its phrase doesn't
+/// reference them - Siri falls back to asking for each one conversationally.
 struct X2BShortcuts: AppShortcutsProvider {
     static var appShortcuts: [AppShortcut] {
         AppShortcut(
@@ -18,6 +21,24 @@ struct X2BShortcuts: AppShortcutsProvider {
             phrases: ["\(.applicationName) Gerät umschalten"],
             shortTitle: "Gerät umschalten",
             systemImageName: "switch.2"
+        )
+        AppShortcut(
+            intent: TurnOnIntent(),
+            phrases: [
+                "Schalte \(\.$control) in \(.applicationName) ein",
+                "\(.applicationName): \(\.$control) einschalten",
+            ],
+            shortTitle: "Einschalten",
+            systemImageName: "power"
+        )
+        AppShortcut(
+            intent: TurnOffIntent(),
+            phrases: [
+                "Schalte \(\.$control) in \(.applicationName) aus",
+                "\(.applicationName): \(\.$control) ausschalten",
+            ],
+            shortTitle: "Ausschalten",
+            systemImageName: "power"
         )
         AppShortcut(
             intent: SetBlindPositionIntent(),
