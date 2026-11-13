@@ -79,7 +79,7 @@ struct X2BShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: PlayRadioFavoriteIntent(),
             phrases: [
-                "Spiele \(\.$favoriteName) in \(.applicationName)",
+                "Spiele einen Favoriten auf \(\.$control) in \(.applicationName)",
                 "\(.applicationName): \(\.$control) abspielen",
             ],
             shortTitle: "Radio-Favorit abspielen",
