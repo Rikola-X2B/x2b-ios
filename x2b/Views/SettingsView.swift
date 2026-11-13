@@ -43,22 +43,7 @@ struct SettingsView: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 8)
 
-            ZStack(alignment: .bottomTrailing) {
-                connectionList
-
-                Button {
-                    editingTarget = .add
-                } label: {
-                    Image(systemName: "plus")
-                        .font(.system(size: 20, weight: .semibold))
-                        .foregroundColor(.white)
-                        .frame(width: 56, height: 56)
-                        .background(Color(hex: "FFA726"))
-                        .clipShape(Circle())
-                        .shadow(radius: 4)
-                }
-                .padding(16)
-            }
+            connectionList
 
             bottomBar
         }
@@ -116,6 +101,12 @@ struct SettingsView: View {
                         .foregroundColor(.white)
                         .frame(width: 48, height: 48)
                 }
+            }
+            Button(action: { editingTarget = .add }) {
+                Image(systemName: "plus")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundColor(.white)
+                    .frame(width: 48, height: 48)
             }
         }
         .padding(.horizontal, 8)
