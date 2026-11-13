@@ -88,6 +88,15 @@
 	<string>X2B kann deinen Standort nutzen, um beim Erreichen einer gespeicherten Box automatisch zu dieser zu wechseln.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>X2B kann auch im Hintergrund automatisch zur richtigen Box wechseln, wenn du deren gespeicherten Standort erreichst.</string>
+	<!-- Needed for the BIM module's "Kamera öffnen"/"Bild auswählen" buttons when
+	     reporting a Störmeldung - these are plain <input type="file"> elements in the
+	     web content, which WKWebView handles with its own native camera/photo picker
+	     UI (no WKUIDelegate hook needed on our side), but iOS hard-crashes the whole
+	     app the instant that's invoked without these usage descriptions declared. -->
+	<key>NSCameraUsageDescription</key>
+	<string>X2B benötigt Zugriff auf die Kamera, um Fotos zu einer Störmeldung aufzunehmen.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>X2B benötigt Zugriff auf deine Fotos, um ein Bild zu einer Störmeldung hinzuzufügen.</string>
 	<!-- The app only ever uses standard HTTPS/TLS (via URLSession/WKWebView) for
 	     network requests - no custom or proprietary encryption - so it qualifies
 	     for the export-compliance exemption. Declaring this upfront skips the
