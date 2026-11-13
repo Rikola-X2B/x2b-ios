@@ -43,8 +43,8 @@ struct X2BShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: SetBlindPositionIntent(),
             phrases: [
-                "Stelle den Rollladen \(\.$control) in \(.applicationName) auf \(\.$position) Prozent",
-                "\(.applicationName): Rollladen \(\.$control) auf \(\.$position) Prozent",
+                "Stelle den Rollladen \(\.$control) in \(.applicationName) ein",
+                "\(.applicationName): Rollladen \(\.$control) einstellen",
             ],
             shortTitle: "Rollladen-Position",
             systemImageName: "blinds.horizontal.closed"
@@ -79,8 +79,8 @@ struct X2BShortcuts: AppShortcutsProvider {
         AppShortcut(
             intent: PlayRadioFavoriteIntent(),
             phrases: [
-                "Spiele \(\.$favoriteName) auf dem Radio \(\.$control) in \(.applicationName)",
-                "\(.applicationName): \(\.$favoriteName) auf \(\.$control) abspielen",
+                "Spiele \(\.$favoriteName) in \(.applicationName)",
+                "\(.applicationName): \(\.$control) abspielen",
             ],
             shortTitle: "Radio-Favorit abspielen",
             systemImageName: "play.circle"
